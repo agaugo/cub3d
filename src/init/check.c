@@ -10,22 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "../../inc/cub3d.h"
 
-# include <stdint.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/time.h>
-# include <unistd.h>
-# include <fcntl.h>
+int check_input(char *input)
+{
+    int     len;
 
-//# include "mlx/mlx.h"
-# include "../libft/libft.h"
-//# include "ft_printf/ft_printf.h"
-# include "../get_next_line/get_next_line.h"
-
-int error(char *msg);
-int check_input(char *input);
-
-#endif
+    if (!input)
+        return (0);
+    len = (int)ft_strlen(input);
+    if (ft_strncmp(&input[len - 4], ".cub", 4))
+        return (0);
+    return (1);
+}
