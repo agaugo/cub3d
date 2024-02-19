@@ -14,6 +14,7 @@
 
 int    error(char *msg)
 {
+    printf("Error: ");
     printf("%s\n", msg);
     return (0);
 }
