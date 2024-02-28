@@ -1,14 +1,19 @@
 # cub3d
 
-File structure
+**File Structure:**
 
 cub3d
 - README.md
 - Makefile
+- lib
+  - get_next_line
+  - glfw
+  - libft
+  - MLX42
 - inc
   - cub3d.h
 - src
-  - init              //initiate program incl main
+  - main
       - main.c
-  - chmap             //"check map" map logic and validity checker
-      - so_long/  
+  - map
+      - map_validator.c
