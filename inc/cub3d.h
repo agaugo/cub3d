@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 13:54:56 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/06 20:50:05 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@
 # include "../lib/get_next_line/get_next_line.h"
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 
-# define S_W 1900 // screen width
-# define S_H 1000 // screen height
+#define SCREEN_WIDTH 1300  // make sure these match your actual screen dimensions
+#define SCREEN_HEIGHT 700
+#define MAP_WIDTH 24  // based on the number of columns in your map
+#define MAP_HEIGHT 6   // based on the number of rows in your map
+
+#define pixel_width_per_square (SCREEN_WIDTH / MAP_WIDTH)
+#define pixel_height_per_square (SCREEN_HEIGHT / MAP_HEIGHT)
+
 # define TILE_SIZE 30 // tile size
 # define FOV 60 // field of view
-# define ROTATION_SPEED 0.020 // rotation speed
+# define ROTATION_SPEED 2 // rotation speed
 # define PLAYER_SPEED 2 // player speed
 
 typedef struct s_player //the player structure
@@ -36,7 +42,7 @@ typedef struct s_player //the player structure
 	int  pixel_y;
 	double angle;
 	float fov_rd;
-	int  rot; // rotation flag
+	int  rotation; // rotation flag
 	int  l_r; // left right flag
 	int  u_d; // up down flag
 }	t_player;
@@ -72,12 +78,12 @@ t_map	*cub_load_map_values(char *file);
 int		cub_validate_map(char *file);
 void	cub_start_game(t_map *map);
 void	cub_hook(t_mlx *mlx, double move_x, double move_y);
-void	cub_cast_rays(t_mlx *mlx);
 void	cub_exit(t_mlx *mlx);
 void	cub_mlx_key(mlx_key_data_t keydata, void *ml);
 void	cub_handle_error(int exit_code, char *message);
 void	*memory_realloc(void *ptr, size_t new_size);
 void	free_memory(void *buffer);
 void	*allocate_memory(size_t buffer_size);
+void	key_event(mlx_key_data_t keydata, void* ml);
 
 #endif
