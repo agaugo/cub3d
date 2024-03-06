@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdup.c                                        :+:    :+:            */
+/*   ft_strncmp.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/13 13:46:59 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/06 13:50:20 by trstn4        ########   odam.nl         */
+/*   Created: 2022/10/10 16:35:56 by tvan-bee      #+#    #+#                 */
+/*   Updated: 2022/10/13 11:42:39 by tvan-bee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-# include "../../inc/cub3D.h"
 
-char	*ft_strdup(const char *s1)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char		*buffer;
-	size_t		s1_len;
+	size_t	i;
 
-	s1_len = ft_strlen(s1) + 1;
-	buffer = (char *)allocate_memory(sizeof(char) * s1_len);
-	if (!buffer)
-		return (NULL);
-	ft_memcpy(buffer, s1, s1_len);
-	return (buffer);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

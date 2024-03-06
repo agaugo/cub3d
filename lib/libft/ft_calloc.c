@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/13 11:44:30 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2022/10/13 11:44:57 by tvan-bee      ########   odam.nl         */
+/*   Updated: 2024/03/06 13:48:06 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void	*ft_calloc(size_t count, size_t size)
 	return ((void *)buffer);
 }
 */
-
 #include "libft.h"
+# include "../../inc/cub3D.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
 	void	*buffer;
 
-	buffer = (void *)malloc(size * count);
+	buffer = (void *)allocate_memory(size * count);
 	if (!buffer)
 		return (NULL);
 	ft_bzero(buffer, size * count);

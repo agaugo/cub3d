@@ -1,49 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strlen.c                                        :+:    :+:            */
+/*   ft_lstlast_bonus.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/10 16:36:16 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2022/10/10 16:37:00 by tvan-bee      ########   odam.nl         */
+/*   Created: 2022/10/22 12:08:18 by tvan-bee      #+#    #+#                 */
+/*   Updated: 2023/05/17 12:04:53 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 DESCRIPTION
-    The strlen() function computes the length of the string s.
+	Returns the last node of the list.
 
 PARAMETERS
-	s: The string which length will be counted.
+	lst: The beginning of the list.
 
 RETURN VALUES
-    The strlen() function returns the number of characters that precede the
-	terminating NUL character.
+	Last node of the list.
 */
 
 /*
-size_t	ft_strlen(const char *s)
+t_list	*ft_lstlast(t_list *lst)
 {
-	int	i;
-
-	i = 0;
-	// Increases length '+1' if index is not equal to terminator character '\0'.
-	while (s[i])
-		i++;
-	// Returns length.
-	return (i);
+	// Returns NULL if 'lst' has no value.
+	if (!lst)
+		return (NULL);
+	// Loops till the temrinator is reached in the list.
+	while (lst->next)
+		// Continues to the next node.
+		lst = lst->next;
+	// Returns the last node from the loop.
+	return (lst);
 }
 */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+t_list	*ft_lstlast(t_list *lst)
 {
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }

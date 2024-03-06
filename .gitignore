@@ -1,8 +1,5 @@
 # Program
-minishell
-
-# Teser
-minishell_tester
+cub3D
 
 # Object files, which are generated when you compile C
 *.o

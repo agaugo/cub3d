@@ -7,7 +7,6 @@ cub3d
 - Makefile
 - lib
   - get_next_line
-  - glfw
   - libft
   - MLX42
 - inc
@@ -15,5 +14,6 @@ cub3d
 - src
   - main
       - main.c
+      - start.c
   - map
       - map_validator.c

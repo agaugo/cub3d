@@ -1,49 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strlen.c                                        :+:    :+:            */
+/*   ft_lstsize.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/10 16:36:16 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2022/10/10 16:37:00 by tvan-bee      ########   odam.nl         */
+/*   Created: 2022/10/22 12:07:52 by tvan-bee      #+#    #+#                 */
+/*   Updated: 2022/10/22 12:07:57 by tvan-bee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 DESCRIPTION
-    The strlen() function computes the length of the string s.
+	Counts the number of nodes in a list.
 
 PARAMETERS
-	s: The string which length will be counted.
+	lst: The beginning of the list.
 
 RETURN VALUES
-    The strlen() function returns the number of characters that precede the
-	terminating NUL character.
+	The length of the list.
 */
 
 /*
-size_t	ft_strlen(const char *s)
+int	ft_lstsize(t_list *lst)
 {
-	int	i;
+	int	size;
 
-	i = 0;
-	// Increases length '+1' if index is not equal to terminator character '\0'.
-	while (s[i])
-		i++;
-	// Returns length.
-	return (i);
+	size = 0;
+	// Loops till the terminator is reached in the list.
+	while (lst)
+	{
+		// Continues to the next node and adds the size '+1'.
+		lst = lst->next;
+		size++;
+	}
+	// Returns the size/length of the list.
+	return (size);
 }
 */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_lstsize(t_list *lst)
 {
-	int	i;
+	int	size;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	size = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		size++;
+	}
+	return (size);
 }
