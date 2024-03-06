@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:08 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 21:54:04 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/06 22:25:49 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,8 @@ void cub_start_game(t_map *map) // start the game
 	mlx.ray = calloc(1, sizeof(t_ray)); // init the ray structure
 	mlx.mlx_p = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D", 0); // init the mlx pointer
 
-	// Calculate player start x and y in pixels.
-	// mlx
-	// calculate_pixel_size(&mlx);
+	mlx.player->pixel_x = 156;
+	mlx.player->pixel_y = 212;
 
 	mlx_loop_hook(mlx.mlx_p, &cub_game_loop, &mlx); // game loop
 	mlx_key_hook(mlx.mlx_p, &key_event, &mlx); // key press and release
