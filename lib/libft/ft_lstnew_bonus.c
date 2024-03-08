@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/22 12:07:32 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/06 13:49:37 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 21:52:10 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_list	*ft_lstnew(void *content)
 */
 
 #include "libft.h"
-# include "../../inc/cub3D.h"
+#include "../../inc/cub3D.h"
 
 t_list	*ft_lstnew(void *content)
 {

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:14 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 15:03:27 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 15:39:11 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int cub_is_border_valid(const char *file) {
         }
 
         if (fgets(nextLine, MAX_LINE_LENGTH, fp)) {
-            fseek(fp, -strlen(nextLine), SEEK_CUR);
+            fseek(fp, -ft_strlen(nextLine), SEEK_CUR);
             nextLine[strcspn(nextLine, "\n")] = '\0';
         } else {
             nextLine[0] = '\0';

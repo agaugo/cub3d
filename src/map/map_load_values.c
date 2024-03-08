@@ -6,16 +6,31 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:02:26 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 13:47:29 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 15:38:29 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3D.h"
 
+int cub_get_tile_size(t_map *map)
+{
+    int tile_width;
+    int tile_height;
+    int tile_size;
+
+    tile_width = (SCREEN_WIDTH / map->width);
+    tile_height = (SCREEN_HEIGHT / map->height);
+    if (tile_width < tile_height)
+        tile_size = tile_width;
+    else
+        tile_size = tile_height;
+    return (tile_size);
+}
+
 t_map *cub_load_map_values(char *file) {
     int fd, i = 0, max_width = 0;
     char *line;
-    t_map *dt = calloc(1, sizeof(t_map));
+    t_map *dt = ft_calloc(1, sizeof(t_map));
 	
     if (!dt)
 		return NULL;
@@ -26,7 +41,7 @@ t_map *cub_load_map_values(char *file) {
         return NULL;
     }
 
-    dt->field = calloc(1, sizeof(char *)); // Start with allocation for 1 line, will realloc as needed
+    dt->field = ft_calloc(1, sizeof(char *)); // Start with allocation for 1 line, will realloc as needed
     if (!dt->field) {
         free(dt);
         close(fd);
@@ -35,7 +50,7 @@ t_map *cub_load_map_values(char *file) {
 
     while ((line = get_next_line(fd))) {
         // Dynamically adjust the size of map
-        char **temp = realloc(dt->field, (i + 2) * sizeof(char *));
+        char **temp = memory_realloc(dt->field, (i + 2) * sizeof(char *));
         if (!temp) {
             // Handle allocation failure; free previously allocated memory
             while (i-- > 0) free(dt->field[i]);
@@ -48,13 +63,13 @@ t_map *cub_load_map_values(char *file) {
         dt->field = temp;
 
         dt->field[i] = line;
-        int line_length = strlen(line);
+        int line_length = ft_strlen(line);
         if (line_length > max_width) max_width = line_length;
 
-        char *p = strchr(line, 'P');
+        char *p = ft_strchr(line, 'P');
         if (p) {
-            dt->start_y = i;
-            dt->start_x = (int)(p - line);
+            dt->player_start_y = i;
+            dt->player_start_x = (int)(p - line);
         }
 
         i++;
@@ -62,7 +77,8 @@ t_map *cub_load_map_values(char *file) {
     dt->field[i] = NULL; // Null-terminate the array of lines
     dt->height = i; // Number of lines read is the height of the map
     dt->width = max_width; // The longest line defines the width of the map
-
+    dt->tile_size = cub_get_tile_size(dt);
+    
     close(fd);
     return dt;
 }

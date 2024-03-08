@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:20:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 20:17:59 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/07 18:05:46 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define MAX_LINE_LENGTH 1024
 
-int cub_setup_map(char *file) {
+int cub_setup_map_checks(char *file) {
     FILE *fp, *fpWrite;
     char *outputFilename = "output.txt";
     char line[MAX_LINE_LENGTH];

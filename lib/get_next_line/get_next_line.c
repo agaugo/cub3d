@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/07 13:52:34 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2022/12/21 16:37:56 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 22:20:54 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static char	*ft_set_buffer(char *buffer)
 
 	if (!ft_gnl_strchr(buffer, '\n'))
 		return (free(buffer), NULL);
-	new_buffer = ft_gnl_substr((ft_gnl_strchr(buffer, '\n') + 1), ft_gnl_strlen(ft_gnl_strchr(buffer, '\n')));
+	new_buffer = ft_gnl_substr((ft_gnl_strchr(buffer, '\n') + 1),
+			ft_gnl_strlen(ft_gnl_strchr(buffer, '\n')));
 	return (free(buffer), new_buffer);
 }
 
@@ -30,12 +31,13 @@ static char	*ft_get_line(char *buffer)
 	if (!*buffer)
 		return (NULL);
 	if (ft_gnl_strchr(buffer, '\n'))
-		len = ((ft_gnl_strlen(buffer) - ft_gnl_strlen(ft_gnl_strchr(buffer, '\n'))) + 1);
+		len = ((ft_gnl_strlen(buffer)
+					- ft_gnl_strlen(ft_gnl_strchr(buffer, '\n'))) + 1);
 	else
 		len = ft_gnl_strlen(buffer);
 	line = ft_gnl_substr(buffer, len);
-    if (!line)
-        return(free(buffer), NULL);
+	if (!line)
+		return (free(buffer), NULL);
 	return (line);
 }
 
@@ -46,7 +48,7 @@ static char	*ft_read_file(int fd, char *buffer)
 
 	new_buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!new_buffer)
-        return(free(buffer), NULL);
+		return (free(buffer), NULL);
 	bytes = 1;
 	while (bytes > 0)
 	{
@@ -58,9 +60,9 @@ static char	*ft_read_file(int fd, char *buffer)
 			return (NULL);
 		}
 		new_buffer[bytes] = '\0';
-		buffer = ft_gnl_strjoin(buffer, new_buffer, 0, 0);
-        if (!buffer)
-            return(free(new_buffer), NULL);
+		buffer = ft_gnl_strjoin(buffer, new_buffer);
+		if (!buffer)
+			return (free(new_buffer), NULL);
 		if (ft_gnl_strchr(buffer, '\n'))
 			break ;
 	}

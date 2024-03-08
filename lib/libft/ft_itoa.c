@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 12:05:04 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/06 13:48:15 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 21:53:01 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_itoa(int n)
 */
 
 #include "libft.h"
-# include "../../inc/cub3D.h"
+#include "../../inc/cub3D.h"
 
 static int	count_num_len(int n)
 {

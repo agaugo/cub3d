@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/07 13:52:41 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2022/12/21 16:38:10 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 22:25:05 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_gnl_substr(char *src, size_t len)
 {
 	char	*dst;
 	size_t	i;
-	
+
 	dst = (char *)malloc(sizeof(char) * (len + 1));
 	if (!dst)
 		return (free(src), NULL);
@@ -42,17 +42,13 @@ int	ft_gnl_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_gnl_strjoin(char *s1, char *s2, unsigned int i, unsigned int j)
+void	ft_concatenate_strings(char *buffer, char *s1, char *s2)
 {
-	char			*buffer;
+	unsigned int	i;
+	unsigned int	j;
 
-	buffer = (char *)malloc(sizeof(char) * (ft_gnl_strlen(s1) + ft_gnl_strlen(s2) + 1));
-	if (!buffer)
-	{
-		if (s1)
-			free(s1);
-		return (NULL);
-	}
+	i = 0;
+	j = 0;
 	if (s1)
 	{
 		while (s1[i])
@@ -60,7 +56,6 @@ char	*ft_gnl_strjoin(char *s1, char *s2, unsigned int i, unsigned int j)
 			buffer[i] = s1[i];
 			i++;
 		}
-		free(s1);
 	}
 	while (s2[j])
 	{
@@ -69,12 +64,29 @@ char	*ft_gnl_strjoin(char *s1, char *s2, unsigned int i, unsigned int j)
 		j++;
 	}
 	buffer[i] = '\0';
+}
+
+char	*ft_gnl_strjoin(char *s1, char *s2)
+{
+	char	*buffer;
+
+	buffer = (char *)malloc(sizeof(char)
+			* (ft_gnl_strlen(s1) + ft_gnl_strlen(s2) + 1));
+	if (!buffer)
+	{
+		if (s1)
+			free(s1);
+		return (NULL);
+	}
+	ft_concatenate_strings(buffer, s1, s2);
+	if (s1)
+		free(s1);
 	return (buffer);
 }
 
 char	*ft_gnl_strchr(char *s, char c)
 {
-	int i;
+	int	i;
 
 	if (!s)
 		return (NULL);

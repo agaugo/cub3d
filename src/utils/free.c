@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   free.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/03/07 23:27:32 by trstn4        #+#    #+#                 */
+/*   Updated: 2024/03/08 00:07:42 by trstn4        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "../../inc/cub3D.h"
 
-void cub_exit(t_mlx *mlx)   // exit the game
+void	cub_exit(t_mlx *mlx)
 {
 	int i = 0;
 	while (mlx->map->field[i])
-		free(mlx->map->field[i++]); // free the map line by line
-	free(mlx->map->field); // free the map
-	free(mlx->map); // free the data structure
-	free(mlx->player); // free the player structure
-	free(mlx->ray); // free the ray structure
-	mlx_delete_image(mlx->mlx_p, mlx->img); // delete the image
-	mlx_close_window(mlx->mlx_p); // close the window
-	mlx_terminate(mlx->mlx_p); // terminate the mlx pointer
-	printf("Exited cub3D cleanly.\n"); // print the message
+		free(mlx->map->field[i++]);
+	free(mlx->map->field);
+	free(mlx->map);
+	free(mlx->player);
+	mlx_delete_image(mlx->mlx_p, mlx->img);
+	mlx_close_window(mlx->mlx_p);
+	mlx_terminate(mlx->mlx_p);
+	printf("Exited cub3D cleanly.\n");
 	exit(0);
 }

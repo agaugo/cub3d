@@ -6,48 +6,79 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:06 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/06 21:14:32 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/08 15:29:05 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3D.h"
-#include <math.h> // Include the math library for sin, cos, and conversion from degrees to radians
 
-void key_event(mlx_key_data_t keydata, void* ml) {
-    t_mlx *mlx;
 
-    mlx = ml;
+int cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)
+{
+	if (mlx->map->field[map_grid_y][map_grid_x] != '1')
+		return (1);
+	return (0);
+}
 
-    // Convert rotation from degrees to radians for trigonometric calculations
-    double rotation_radians = mlx->player->rotation * (M_PI / 180.0);
+void	cub_move_player(t_mlx *mlx, double move_x, double move_y)
+{
+	int  new_map_grid_y;
+	int  new_map_grid_x;
+	int  new_player_pixel_x;
+	int  new_player_pixel_y;
 
-    if (keydata.key == MLX_KEY_W) {
-        mlx->player->pixel_x += cos(rotation_radians) * PLAYER_SPEED;
-        mlx->player->pixel_y += sin(rotation_radians) * PLAYER_SPEED;
-    }
-    if (keydata.key == MLX_KEY_S) {
-        mlx->player->pixel_x -= cos(rotation_radians) * PLAYER_SPEED;
-        mlx->player->pixel_y -= sin(rotation_radians) * PLAYER_SPEED;
-    }
-    if (keydata.key == MLX_KEY_A) {
-        mlx->player->pixel_x -= sin(rotation_radians) * PLAYER_SPEED;
-        mlx->player->pixel_y += cos(rotation_radians) * PLAYER_SPEED;
-    }
-    if (keydata.key == MLX_KEY_D) {
-        mlx->player->pixel_x += sin(rotation_radians) * PLAYER_SPEED;
-        mlx->player->pixel_y -= cos(rotation_radians) * PLAYER_SPEED;
-    }
-    if (keydata.key == MLX_KEY_LEFT) {
-        mlx->player->rotation -= ROTATION_SPEED;
-        if (mlx->player->rotation < 0) {
-            mlx->player->rotation += 360;
-        }
-    }
-    if (keydata.key == MLX_KEY_RIGHT) {
-        mlx->player->rotation += ROTATION_SPEED;
-        if (mlx->player->rotation >= 360) {
-            mlx->player->rotation -= 360;
-        }
-    }
-    printf("X: %d, Y: %d, Rotation: %d\n", mlx->player->pixel_x, mlx->player->pixel_y, mlx->player->rotation);
+	new_player_pixel_x = roundf(mlx->player->pixel_x + move_x);
+	new_player_pixel_y = roundf(mlx->player->pixel_y + move_y);
+	new_map_grid_x = (new_player_pixel_x / mlx->map->tile_size);
+	new_map_grid_y = (new_player_pixel_y / mlx->map->tile_size);
+
+	if (cub_is_wall_hit(mlx, new_map_grid_y, new_map_grid_x) &&
+		cub_is_wall_hit(mlx, new_map_grid_y, mlx->player->pixel_x / mlx->map->tile_size) &&
+		cub_is_wall_hit(mlx, mlx->player->pixel_y / mlx->map->tile_size, new_map_grid_x))
+	{
+		mlx->player->pixel_x = new_player_pixel_x;
+		mlx->player->pixel_y = new_player_pixel_y;
+	}
+}
+
+void	cub_rotate_player(t_mlx *mlx)
+{
+	if (mlx->key->key_l_r == 'r')
+	{
+		mlx->player->angle += ROTATION_SPEED;
+		if (mlx->player->angle > 2 * M_PI)
+			mlx->player->angle -= 2 * M_PI;
+	}
+	if (mlx->key->key_l_r == 'l')
+	{
+		mlx->player->angle -= ROTATION_SPEED;
+		if (mlx->player->angle < 0)
+			mlx->player->angle += 2 * M_PI;
+	}
+}
+
+void	cub_player_update_frame(t_mlx *mlx, double move_x, double move_y)
+{
+	if (mlx->key->key_w_s == 'w')
+	{
+		move_x = cos(mlx->player->angle) * PLAYER_SPEED;
+		move_y = sin(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->key->key_w_s == 's')
+	{
+		move_x = -cos(mlx->player->angle) * PLAYER_SPEED;
+		move_y = -sin(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->key->key_a_d == 'a')
+	{
+		move_x = sin(mlx->player->angle) * PLAYER_SPEED;
+		move_y = -cos(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->key->key_a_d == 'd')
+	{
+		move_x = -sin(mlx->player->angle) * PLAYER_SPEED;
+		move_y = cos(mlx->player->angle) * PLAYER_SPEED;
+	}
+	cub_rotate_player(mlx);
+	cub_move_player(mlx, move_x, move_y);
 }
