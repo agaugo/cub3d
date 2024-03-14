@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:02:26 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/13 23:50:00 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/14 12:09:48 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ void store_identifier_value(char *line, t_map *dt) {
         dt->id_f = extract_value(line);
     else if (strncmp(line, "C", 1) == 0)
         dt->id_c = extract_value(line);
-    else
-        printf("Error\nInvalid identifier found.\n");
 }
 
 t_map *cub_load_map_values(char *file) {
@@ -135,9 +133,8 @@ t_map *cub_load_map_values(char *file) {
     }
 
     int is_map_line = 0; // Flag to check if current lines are part of the map
-    int count = 0;
     while ((line = get_next_line(fd))) {
-        if (!is_map_line && count == 6) {
+        if (!is_map_line && (line[0] == '1' || line[0] == ' ')) {
             is_map_line = 1; // Map starts
         }
 
