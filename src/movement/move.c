@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 
 int cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 void	cub_handle_error(int exit_code, char *message)
 {

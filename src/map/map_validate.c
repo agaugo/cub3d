@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 void cub_is_cub_extension(char *file)
 {

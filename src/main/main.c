@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 // Checks if a character is allowed
 bool is_allowed_char(char c) {

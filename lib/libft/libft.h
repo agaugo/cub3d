@@ -16,7 +16,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-# include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);

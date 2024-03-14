@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3D.h"
+#include "../../inc/cub3d.h"
 
 void	cub_check_key_release(mlx_key_data_t keydata, t_mlx *mlx)
 {
