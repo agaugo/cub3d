@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/08 19:56:56 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/13 23:06:53 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_player
 	int		pixel_x;
 	int		pixel_y;
 	double	angle;
+	char	direction;
 }	t_player;
 
 typedef struct s_key
@@ -52,21 +53,37 @@ typedef struct s_map
 	int		width;
 	int		height;
 	int		tile_size;
+    char	*id_no;
+    char	*id_so;
+    char	*id_we;
+    char 	*id_ea;
+    char 	*id_f;
+    char	*id_c;
+	int		color_floor;
+	int		color_ceiling;
 }	t_map;
+
+typedef struct s_check_map
+{
+	char	**field;
+	int		width;
+	int		height;
+}	t_check_map;
 
 typedef struct s_mlx
 {
 	mlx_image_t	*img;
 	mlx_t		*mlx_p;
 	t_map		*map;
+	t_check_map	*check_map;
 	t_player	*player;
 	t_key		*key;
 }	t_mlx;
 
 // Map:
-int		cub_validate_map(char *file);
-int		cub_setup_map_checks(char *file);
-int		cub_is_border_valid(const char *file);
+int cub_validate_map(t_map *map, char *file);
+int	cub_setup_map_checks(t_map *map, t_check_map *check_map);
+int		cub_is_border_valid(t_check_map *check_map);
 t_map	*cub_load_map_values(char *file);
 void	cub_set_player_start_position(t_mlx *mlx);
 

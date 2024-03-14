@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/08 21:51:06 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/13 22:31:31 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	cub_set_pixel(t_mlx *mlx, int x, int y, int color)
 		mlx_put_pixel(mlx->img, x, y, color);
 }
 
+int	rgb_to_hex2(int r, int g, int b)
+{
+	return (r << 24 | g << 16 | b << 8 | 255 << 0);
+}
 void	cub_draw_vertical_line(t_mlx *mlx, int x, float wall_height)
 {
 	int	y;
@@ -34,13 +38,13 @@ void	cub_draw_vertical_line(t_mlx *mlx, int x, float wall_height)
 		end = SCREEN_HEIGHT;
 	y = 0;
 	while (y++ < start)
-		cub_set_pixel(mlx, x, y, 0x444444);
+		cub_set_pixel(mlx, x, y, mlx->map->color_ceiling);
 	y = start;
 	while (y++ < end)
-		cub_set_pixel(mlx, x, y, 0xFFFFFF);
+		cub_set_pixel(mlx, x, y, rgb_to_hex2(255, 255, 255));
 	y = end;
 	while (y++ < SCREEN_HEIGHT)
-		cub_set_pixel(mlx, x, y, 0xA9A9A9);
+		cub_set_pixel(mlx, x, y, mlx->map->color_floor);
 }
 
 void	cub_handle_wall_found(t_mlx *mlx, float ray_x, float ray_y, float ray_angle, int ray_num, float projection_distance)

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:20:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/07 18:05:46 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/13 23:35:50 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,83 +15,66 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_LINE_LENGTH 1024
-
-int cub_setup_map_checks(char *file) {
-    FILE *fp, *fpWrite;
-    char *outputFilename = "output.txt";
-    char line[MAX_LINE_LENGTH];
-    char *modifiedLines[1000];
-    int longestLineLength = 0;
-    int lineCount = 0;
-
-    fp = fopen(file, "r");
-    if (fp == NULL) {
-        perror("Error opening input file");
-        return(-1);
+void print_modified_map(t_check_map *check_map) {
+    for (int i = 0; i < check_map->height; i++) {
+        printf("%s\n", check_map->field[i]); // Newline added here, after each line is printed
     }
+}
 
-    while (fgets(line, MAX_LINE_LENGTH, fp) != NULL) {
-        line[strcspn(line, "\n")] = 0; // Remove newline character
-        for (int i = 0; line[i]; i++) {
-            if (line[i] == ' ') {
-                line[i] = '.';
-            }
-        }
+void remove_newline(char *line) {
+    int len = strlen(line);
+    if (len > 0 && line[len - 1] == '\n') {
+        line[len - 1] = '\0'; // Replace newline with null terminator
+    }
+}
 
-        int length = strlen(line);
+int cub_setup_map_checks(t_map *map, t_check_map *check_map) {
+    int longestLineLength = 0;
+
+    // First, calculate the longest line length after removing newlines
+    for (int i = 0; i < map->height; i++) {
+        remove_newline(map->field[i]); // Remove newline characters
+        int length = strlen(map->field[i]);
         if (length > longestLineLength) {
             longestLineLength = length;
         }
-
-        modifiedLines[lineCount] = strdup(line);
-        lineCount++;
-    }
-    fclose(fp);
-
-    fpWrite = fopen(outputFilename, "w");
-    if (fpWrite == NULL) {
-        perror("Error opening output file");
-        return(-1);
     }
 
-    // Write top padding
-    for (int i = 0; i < longestLineLength + 2; i++) {
-        fputc('.', fpWrite);
-    }
-    fputc('\n', fpWrite);
+    check_map->width = longestLineLength + 2; // Padding on both sides
+    check_map->height = map->height + 2; // Top and bottom padding
 
-    for (int i = 0; i < lineCount; i++) {
-        int currentLength = strlen(modifiedLines[i]);
-        char *paddedLine = (char *)malloc(longestLineLength + 3); // Additional 2 for dots at both ends + 1 for null terminator
-        if (paddedLine == NULL) {
-            perror("Failed to allocate memory");
-            return(-1);
+    check_map->field = (char **)malloc(sizeof(char *) * check_map->height);
+    if (!check_map->field) {
+        perror("Failed to allocate memory for check_map->field");
+        return -1;
+    }
+
+    // Top padding
+    check_map->field[0] = (char *)calloc(check_map->width + 1, sizeof(char));
+    memset(check_map->field[0], '.', check_map->width);
+
+    for (int i = 0; i < map->height; i++) {
+        check_map->field[i + 1] = (char *)calloc(check_map->width + 1, sizeof(char));
+        check_map->field[i + 1][0] = '.';
+        check_map->field[i + 1][check_map->width - 1] = '.';
+        
+        // Process and copy the line
+        for (int j = 0; j < (int)ft_strlen(map->field[i]); j++) {
+            check_map->field[i + 1][j + 1] = (map->field[i][j] == ' ') ? '.' : map->field[i][j];
         }
-        paddedLine[0] = '.'; // Start with a dot
-        strcpy(paddedLine + 1, modifiedLines[i]); // Copy the line after the starting dot
-        memset(paddedLine + currentLength + 1, '.', longestLineLength - currentLength + 1); // Fill with dots
-        paddedLine[longestLineLength + 1] = '.'; // End with a dot
-        paddedLine[longestLineLength + 2] = '\0'; // Null terminator
-
-        fprintf(fpWrite, "%s\n", paddedLine);
-        free(paddedLine);
-        free(modifiedLines[i]);
+        
+        // Extend the line with dots to match the longest line, plus padding
+        for (int j = strlen(map->field[i]) + 1; j < check_map->width - 1; j++) {
+            check_map->field[i + 1][j] = '.';
+        }
     }
 
-    // Write bottom padding
-    for (int i = 0; i < longestLineLength + 2; i++) {
-        fputc('.', fpWrite);
-    }
-    fputc('\n', fpWrite);
+    // Bottom padding
+    check_map->field[check_map->height - 1] = (char *)calloc(check_map->width + 1, sizeof(char));
+    memset(check_map->field[check_map->height - 1], '.', check_map->width);
 
-    fclose(fpWrite);
+    // Print the modified map for verification
+    print_modified_map(check_map);
 
-    if (cub_is_border_valid(outputFilename)) {
-        printf("The map is valid.\n");
-    } else {
-        printf("The map is not valid.\n");
-    }
-
-    return (0);
+    return 0;
 }
