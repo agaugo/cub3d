@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/13 23:06:53 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/15 10:49:57 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ typedef struct s_map
 	int		width;
 	int		height;
 	int		tile_size;
-    char	*id_no;
-    char	*id_so;
-    char	*id_we;
-    char 	*id_ea;
-    char 	*id_f;
-    char	*id_c;
+	char	*id_no;
+	char	*id_so;
+	char	*id_we;
+	char	*id_ea;
+	char	*id_f;
+	char	*id_c;
 	int		color_floor;
 	int		color_ceiling;
 }	t_map;
@@ -81,10 +81,12 @@ typedef struct s_mlx
 }	t_mlx;
 
 // Map:
-int cub_validate_map(t_map *map, char *file);
-int	cub_setup_map_checks(t_map *map, t_check_map *check_map);
-int		cub_is_border_valid(t_check_map *check_map);
+int		cub_validate_map(t_map *map, char *file);
+void	cub_check_map_characters(t_map *map);
+int		cub_setup_map_checks(t_map *map, t_check_map *check_map);
+void	cub_is_border_valid(t_check_map *check_map);
 t_map	*cub_load_map_values(char *file);
+void	cub_check_and_set_player(t_mlx *mlx);
 void	cub_set_player_start_position(t_mlx *mlx);
 
 // Movement:

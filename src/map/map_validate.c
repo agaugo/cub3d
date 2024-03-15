@@ -6,11 +6,34 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:03:11 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/13 22:45:10 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/15 10:58:00 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
+
+// Checks if a character is allowed
+bool cub_is_char_in_here(char c) {
+    return c == '0' || c == '1' || c == 'N' || c == 'E' || c == 'W' || c == 'S' || c == '\n' || c == '\0';
+}
+
+// Removes white spaces and checks characters
+void cub_check_map_characters(t_map *map)
+{
+    for (int i = 0; i < map->height; i++) {
+        for (int j = 0; map->field[i][j] != '\0'; j++) {
+            // Skipping whitespace characters
+            if (map->field[i][j] == ' ' || map->field[i][j] == '\t') {
+                continue;
+            }
+
+            if (!cub_is_char_in_here(map->field[i][j])) {
+                printf("Error\nCharacter: '%c' is not allowed.\n", map->field[i][j]);
+                exit(1);
+            }
+        }
+    }
+}
 
 void cub_is_cub_extension(char *file)
 {
@@ -36,11 +59,6 @@ int cub_validate_map(t_map *map, char *file)
 	cub_is_cub_extension(file);
 	check_map = ft_calloc(1, sizeof(t_check_map));
 	cub_setup_map_checks(map, check_map);
-    if (cub_is_border_valid(check_map) == 1)
-	{
-		printf("Error\nThe map must be closed/surrounded by walls.\n");
-		exit(1);
-	}
 	free(check_map->field);
 	free(check_map);
 	return (0);
