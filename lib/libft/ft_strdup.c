@@ -6,12 +6,11 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/13 13:46:59 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/08 21:52:30 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/14 20:28:15 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "../../inc/cub3D.h"
 
 char	*ft_strdup(const char *s1)
 {
