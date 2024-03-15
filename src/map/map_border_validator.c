@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:14 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/12 18:27:25 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/15 10:49:50 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ bool check_surroundings(t_check_map *check_map, int x, int y) {
     return true;
 }
 
-int cub_is_border_valid(t_check_map *check_map) {
+void cub_is_border_valid(t_check_map *check_map) {
     for (int i = 0; i < check_map->height; i++) {
         for (int j = 0; j < check_map->width; j++) {
             if (check_map->field[i][j] == '.') {
                 if (!check_surroundings(check_map, i, j)) {
-                    return (1);
+                    printf("Error\nThe map must be closed/surrounded by walls.\n");
+                    exit(1);
                 }
             }
         }
     }
-    return (0);
 }

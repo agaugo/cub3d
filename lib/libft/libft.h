@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 17:16:15 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/14 20:26:14 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/15 10:32:09 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-#include "../../inc/cub3d.h"
+
+# include "../../inc/cub3d.h"
 
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
