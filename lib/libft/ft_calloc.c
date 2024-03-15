@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/13 11:44:30 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/08 21:52:17 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/14 20:27:02 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	*ft_calloc(size_t count, size_t size)
 }
 */
 #include "libft.h"
-#include "../../inc/cub3D.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {

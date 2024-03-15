@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 12:11:06 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/08 21:51:42 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/14 20:27:32 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ RETURN VALUES
 */
 
 #include "libft.h"
-#include "../../inc/cub3D.h"
 
 static void	split_free_memory(char **sub_array, int i)
 {
