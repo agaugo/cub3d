@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:17 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/15 10:51:05 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/18 17:15:26 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	cub_game_loop(void *parsed_mlx)
 {
-	t_mlx *mlx;
+	t_mlx	*mlx;
 
 	mlx = parsed_mlx;
 	mlx_delete_image(mlx->mlx_p, mlx->img);
@@ -26,7 +26,7 @@ void	cub_game_loop(void *parsed_mlx)
 
 void	cub_start_game(t_map *map)
 {
-	t_mlx mlx;
+	t_mlx	mlx;
 
 	mlx.map = map;
 	mlx.player = ft_calloc(1, sizeof(t_player));
@@ -40,16 +40,18 @@ void	cub_start_game(t_map *map)
 	cub_exit(&mlx);
 }
 
-void v()
+void	v(void)
 {
 	system("leaks cub3D");
 }
 
-int main(int argc, char **argv) {
-	t_map *map;
+int	main(int argc, char **argv)
+{
+	t_map	*map;
 
 	// atexit(v); // Remove this before eval
-	if (argc != 2) {
+	if (argc != 2)
+	{
 		printf("Usage:%s <map_file>\n", argv[0]);
 		return (1);
 	}

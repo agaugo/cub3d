@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:03:11 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/15 10:58:00 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/18 18:37:25 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ void cub_is_cub_extension(char *file)
 
 int cub_validate_map(t_map *map, char *file)
 {
-	t_check_map *check_map;
+	t_check_map	*check_map;
 	
 	cub_is_cub_extension(file);
 	check_map = ft_calloc(1, sizeof(t_check_map));
 	cub_setup_map_checks(map, check_map);
+	cub_is_border_valid(check_map);
 	free(check_map->field);
 	free(check_map);
 	return (0);
