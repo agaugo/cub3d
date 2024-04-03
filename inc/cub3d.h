@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/15 10:49:57 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/03 14:49:34 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <math.h>
 # include <fcntl.h>
+# include <ctype.h>
 
 # include "../lib/libft/libft.h"
 # include "../lib/get_next_line/get_next_line.h"
@@ -81,7 +82,8 @@ typedef struct s_mlx
 }	t_mlx;
 
 // Map:
-int		cub_validate_map(t_map *map, char *file);
+void	cub_is_cub_extension(char *file);
+int		cub_validate_map(t_map *map);
 void	cub_check_map_characters(t_map *map);
 int		cub_setup_map_checks(t_map *map, t_check_map *check_map);
 void	cub_is_border_valid(t_check_map *check_map);

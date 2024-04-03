@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:03:11 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/19 00:29:10 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/03 14:44:14 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,16 @@ void	cub_is_cub_extension(char *file)
 	}
 }
 
-int	cub_validate_map(t_map *map, char *file)
+int	cub_validate_map(t_map *map)
 {
 	t_check_map	*check_map;
 
-	cub_is_cub_extension(file);
 	check_map = ft_calloc(1, sizeof(t_check_map));
+	if (check_map == NULL)
+	{
+		printf("Error\nPrevented memory error.");
+		exit(1);
+	}
 	cub_setup_map_checks(map, check_map);
 	cub_is_border_valid(check_map);
 	free(check_map->field);
