@@ -6,14 +6,13 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:06 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/14 22:33:21 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/18 17:12:03 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-
-int cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)
+int	cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)
 {
 	if (mlx->map->field[map_grid_y][map_grid_x] != '1')
 		return (1);
@@ -22,19 +21,20 @@ int cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)
 
 void	cub_move_player(t_mlx *mlx, double move_x, double move_y)
 {
-	int  new_map_grid_y;
-	int  new_map_grid_x;
-	int  new_player_pixel_x;
-	int  new_player_pixel_y;
+	int	new_map_grid_y;
+	int	new_map_grid_x;
+	int	new_player_pixel_x;
+	int	new_player_pixel_y;
 
 	new_player_pixel_x = roundf(mlx->player->pixel_x + move_x);
 	new_player_pixel_y = roundf(mlx->player->pixel_y + move_y);
 	new_map_grid_x = (new_player_pixel_x / mlx->map->tile_size);
 	new_map_grid_y = (new_player_pixel_y / mlx->map->tile_size);
-
-	if (cub_is_wall_hit(mlx, new_map_grid_y, new_map_grid_x) &&
-		cub_is_wall_hit(mlx, new_map_grid_y, mlx->player->pixel_x / mlx->map->tile_size) &&
-		cub_is_wall_hit(mlx, mlx->player->pixel_y / mlx->map->tile_size, new_map_grid_x))
+	if (cub_is_wall_hit(mlx, new_map_grid_y, new_map_grid_x)
+		&& cub_is_wall_hit(mlx, new_map_grid_y, mlx->player->pixel_x
+			/ mlx->map->tile_size)
+		&& cub_is_wall_hit(mlx, mlx->player->pixel_y
+			/ mlx->map->tile_size, new_map_grid_x))
 	{
 		mlx->player->pixel_x = new_player_pixel_x;
 		mlx->player->pixel_y = new_player_pixel_y;

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 23:27:32 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/12 14:30:36 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/03/18 17:12:34 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	cub_exit(t_mlx *mlx)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (mlx->map->field[i])
 		free(mlx->map->field[i++]);
 	free(mlx->map->field);
