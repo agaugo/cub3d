@@ -6,105 +6,271 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/13 22:31:31 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/05 12:34:02 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-#define RAY_LENGTH 100000
-
-void	cub_set_pixel(t_mlx *mlx, int x, int y, int color)
+int	get_rgba(int r, int g, int b, int a)
 {
-	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
-		mlx_put_pixel(mlx->img, x, y, color);
+	return (r << 24 | g << 16 | b << 8 | a << 0);
 }
 
-int	rgb_to_hex2(int r, int g, int b)
+int	reverse_bytes(int c)
 {
-	return (r << 24 | g << 16 | b << 8 | 255 << 0);
-}
-void	cub_draw_vertical_line(t_mlx *mlx, int x, float wall_height)
-{
-	int	y;
-	int	start;
-	int	end;
+	unsigned int	b;
 
-	start = (SCREEN_HEIGHT / 2) - (wall_height / 2);
-	end = start + wall_height;
-	if (start < 0)
-		start = 0;
-	if (end > SCREEN_HEIGHT)
-		end = SCREEN_HEIGHT;
-	y = 0;
-	while (y++ < start)
-		cub_set_pixel(mlx, x, y, mlx->map->color_ceiling);
-	y = start;
-	while (y++ < end)
-		cub_set_pixel(mlx, x, y, rgb_to_hex2(255, 255, 255));
-	y = end;
-	while (y++ < SCREEN_HEIGHT)
-		cub_set_pixel(mlx, x, y, mlx->map->color_floor);
+	b = 0;
+	b |= (c & 0xFF) << 24;
+	b |= (c & 0xFF00) << 8;
+	b |= (c & 0xFF0000) >> 8;
+	b |= (c & 0xFF000000) >> 24;
+	return (b);
 }
 
-void	cub_handle_wall_found(t_mlx *mlx, float ray_x, float ray_y, float ray_angle, int ray_num, float projection_distance)
+void my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 {
-	float delta_x;
-	float delta_y;
-	float direct_distance;
-	float perpendicular_distance;
-	float wall_height;
-	
-	delta_x = ray_x - mlx->player->pixel_x;
-	delta_y = ray_y - mlx->player->pixel_y;
-	direct_distance = sqrt(delta_x * delta_x + delta_y * delta_y);
-	perpendicular_distance = direct_distance * cos(ray_angle - mlx->player->angle);
-	wall_height = (mlx->map->tile_size / perpendicular_distance) * projection_distance;
-	cub_draw_vertical_line(mlx, ray_num, wall_height);
+	if (x < 0)
+		return ;
+	else if (x >= SCREEN_WIDTH)
+		return ;
+	if (y < 0)
+		return ;
+	else if (y >= SCREEN_HEIGHT)
+		return ;
+	mlx_put_pixel(mlx->img, x, y, color);
 }
 
-void	cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, float projection_distance)
+float nor_angle(float angle)
 {
-	float ray_x = mlx->player->pixel_x;
-	float ray_y = mlx->player->pixel_y;
-	int i;
+	if (angle < 0)
+		angle += (2 * M_PI);
+	if (angle > (2 * M_PI))
+		angle -= (2 * M_PI);
+	return (angle);
+}
 
+void draw_floor_ceiling(t_mlx *mlx, int ray, int t_pix, int b_pix)
+{
+	int	i;
+
+	i = b_pix;
+	while (i < SCREEN_HEIGHT)
+		my_mlx_pixel_put(mlx, ray, i++, mlx->map->color_ceiling);
 	i = 0;
-	while (i++ < RAY_LENGTH)
-	{
-		int map_x = (int)ray_x / mlx->map->tile_size;
-		int map_y = (int)ray_y / mlx->map->tile_size;
+	while (i < t_pix)
+		my_mlx_pixel_put(mlx, ray, i++, mlx->map->color_floor);
+}
 
-		if (mlx->map->field[map_y][map_x] == '1') {
-			cub_handle_wall_found(mlx, ray_x, ray_y, ray_angle, ray_num, projection_distance);
-			break;
-		}
-		ray_x += cos(ray_angle);
-		ray_y += sin(ray_angle);
+mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
+{
+	mlx->ray->ray_ngl = nor_angle(mlx->ray->ray_ngl);
+	if (flag == 0)
+	{
+		if (mlx->ray->ray_ngl > M_PI / 2 && mlx->ray->ray_ngl < 3 * (M_PI / 2))
+			return (mlx->tex->ea);
+		else
+			return (mlx->tex->we);
+	}
+	else
+	{
+		if (mlx->ray->ray_ngl > 0 && mlx->ray->ray_ngl < M_PI)
+			return (mlx->tex->so);
+		else
+			return (mlx->tex->no);
 	}
 }
 
-void	cub_init_ray_casting(t_mlx *mlx, float *ray_angle, float *angle_increment, float *projection_distance)
+double	get_x_o(mlx_texture_t	*texture, t_mlx *mlx)
 {
-	*ray_angle = mlx->player->angle - (FOV / 2.0 * (M_PI / 180.0));
-	*angle_increment = FOV / (float)SCREEN_WIDTH * (M_PI / 180.0);
-	*projection_distance = (SCREEN_WIDTH / 2) / tan(FOV / 2.0 * (M_PI / 180.0));
+	double	x_o;
+
+	if (mlx->ray->flag == 1)
+		x_o = (int)fmodf((mlx->ray->horiz_x * \
+		(texture->width / mlx->map->tile_size)), texture->width);
+	else
+		x_o = (int)fmodf((mlx->ray->vert_y * \
+		(texture->width / mlx->map->tile_size)), texture->width);
+	printf("wall_x: %f, texture width: %d, x_o: %f\n", mlx->ray->horiz_x, texture->width, x_o);
+	return (x_o);
 }
 
-void	cub_cast_rays(t_mlx *mlx)
+void	draw_wall(t_mlx *mlx, int t_pix, int b_pix, double wall_h)
 {
-	float ray_angle;
-	float angle_increment;
-	float projection_distance;
-	int ray_num = 0;
-	
-	cub_init_ray_casting(mlx, &ray_angle, &angle_increment, &projection_distance);
-	while (ray_num++ < SCREEN_WIDTH)
+	double			x_o;
+	double			y_o;
+	mlx_texture_t	*texture;
+	uint32_t		*arr;
+	double			factor;
+
+	texture = get_texture(mlx, mlx->ray->flag);
+	arr = (uint32_t *)texture->pixels;
+	factor = (double)texture->height / wall_h;
+	x_o = get_x_o(texture, mlx);
+	y_o = (t_pix - (SCREEN_HEIGHT / 2) + (wall_h / 2)) * factor;
+	if (y_o < 0)
+		y_o = 0;
+	while (t_pix < b_pix)
 	{
-		ray_angle = fmod(ray_angle, 2.0 * M_PI);
-		if (ray_angle < 0)
-			ray_angle += 2.0 * M_PI;
-		cub_cast_single_ray(mlx, ray_angle, ray_num, projection_distance);
-		ray_angle += angle_increment;
+		my_mlx_pixel_put(mlx, mlx->ray->index, t_pix, reverse_bytes \
+		(arr[(int)y_o * texture->width + (int)x_o]));
+		y_o += factor;
+		t_pix++;
 	}
+}
+
+void	render_wall(t_mlx *mlx, int ray)
+{
+	double	wall_h;
+	double	b_pix;
+	double	t_pix;
+
+	mlx->ray->distance *= cos(nor_angle(mlx->ray->ray_ngl - mlx->player->angle));
+	wall_h = (mlx->map->tile_size / mlx->ray->distance) * ((SCREEN_WIDTH / 2) / \
+	tan(mlx->player->fov_rd / 2));
+	b_pix = (SCREEN_HEIGHT / 2) + (wall_h / 2);
+	t_pix = (SCREEN_HEIGHT / 2) - (wall_h / 2);
+	if (b_pix > SCREEN_HEIGHT)
+		b_pix = SCREEN_HEIGHT;
+	if (t_pix < 0)
+		t_pix = 0;
+	mlx->ray->index = ray;
+	draw_wall(mlx, t_pix, b_pix, wall_h);
+	draw_floor_ceiling(mlx, ray, t_pix, b_pix);
+}
+
+int	unit_circle(float angle, char c)
+{
+	if (c == 'x')
+	{
+		if (angle > 0 && angle < M_PI)
+			return (1);
+	}
+	else if (c == 'y')
+	{
+		if (angle > (M_PI / 2) && angle < (3 * M_PI) / 2)
+			return (1);
+	}
+	return (0);
+}
+
+int inter_check(t_mlx *mlx, float angle, float *inter, float *step, int is_horizon) // check the intersection
+{
+ if (is_horizon)
+ {
+  if (angle > 0 && angle < M_PI)
+  {
+   *inter += mlx->map->tile_size;
+   return (-1);
+  }
+  *step *= -1;
+ }
+ else
+ {
+  if (!(angle > M_PI / 2 && angle < 3 * M_PI / 2)) 
+  {
+   *inter += mlx->map->tile_size;
+   return (-1);
+  }
+  *step *= -1;
+ }
+ return (1);
+}
+
+int wall_hit(float x, float y, t_mlx *mlx) // check the wall hit
+{
+ int  x_m;
+ int  y_m;
+
+ if (x < 0 || y < 0)
+  return (0);
+ x_m = floor (x / mlx->map->tile_size); // get the x position in the map
+ y_m = floor (y / mlx->map->tile_size); // get the y position in the map
+ if ((y_m >= mlx->map->height || x_m >= mlx->map->width))
+  return (0);
+ if (mlx->map->field[y_m] && x_m <= (int)strlen(mlx->map->field[y_m]))
+ {
+  if (mlx->map->field[y_m][x_m] == '1')
+   return (0);
+ }
+ return (1);
+}
+
+float	get_h_inter(t_mlx *mlx, float angl)
+{
+	float	h_x;
+	float	h_y;
+	float	x_step;
+	float	y_step;
+	int		pixel;
+
+	y_step = mlx->map->tile_size;
+	x_step = mlx->map->tile_size / tan(angl);
+	h_y = floor(mlx->player->pixel_y / mlx->map->tile_size) * mlx->map->tile_size;
+	pixel = inter_check(mlx, angl, &h_y, &y_step, 1);
+	h_x = mlx->player->pixel_x + (h_y - mlx->player->pixel_y) / tan(angl);
+	if ((unit_circle(angl, 'y') && x_step > 0) || (!unit_circle(angl, 'y') && x_step < 0))
+		x_step *= -1;
+	while (wall_hit(h_x, h_y - pixel, mlx))
+	{
+		h_x += x_step;
+		h_y += y_step;
+	}
+	mlx->ray->horiz_x = h_x;
+	mlx->ray->horiz_y = h_y;
+	return (sqrt(pow(h_x - mlx->player->pixel_x, 2) + \
+	pow(h_y - mlx->player->pixel_y, 2)));
+}
+
+float	get_v_inter(t_mlx *mlx, float angl)
+{
+	float	v_x;
+	float	v_y;
+	float	x_step;
+	float	y_step;
+	int		pixel;
+
+	x_step = mlx->map->tile_size;
+	y_step = mlx->map->tile_size * tan(angl);
+	v_x = floor(mlx->player->pixel_x / mlx->map->tile_size) * mlx->map->tile_size;
+	pixel = inter_check(mlx, angl, &v_x, &x_step, 0);
+	v_y = mlx->player->pixel_y + (v_x - mlx->player->pixel_x) * tan(angl);
+	if ((unit_circle(angl, 'x') && y_step < 0) || (!unit_circle(angl, 'x') && y_step > 0))
+		y_step *= -1;
+	while (wall_hit(v_x - pixel, v_y, mlx))
+	{
+		v_x += x_step;
+		v_y += y_step;
+	}
+	mlx->ray->vert_x = v_x;
+	mlx->ray->vert_y = v_y;
+	return (sqrt(pow(v_x - mlx->player->pixel_x, 2) + \
+	pow(v_y - mlx->player->pixel_y, 2)));
+}
+
+void cast_rays(t_mlx *mlx) // cast the rays
+{
+ double h_inter;
+ double v_inter;
+ int  ray;
+
+ ray = 0;
+ mlx->ray->ray_ngl = mlx->player->angle - (mlx->player->fov_rd / 2); // the start angle
+ while (ray < SCREEN_WIDTH) // loop for the rays
+ {
+  mlx->ray->flag = 0; // flag for the wall
+  h_inter = get_h_inter(mlx, nor_angle(mlx->ray->ray_ngl)); // get the horizontal intersection
+  v_inter = get_v_inter(mlx, nor_angle(mlx->ray->ray_ngl)); // get the vertical intersection
+  if (v_inter <= h_inter) // check the distance
+   mlx->ray->distance = v_inter; // get the distance
+  else
+  {
+   mlx->ray->distance = h_inter; // get the distance
+   mlx->ray->flag = 1; // flag for the wall
+  }
+  render_wall(mlx, ray); // render the wall
+  ray++; // next ray
+  mlx->ray->ray_ngl += (mlx->player->fov_rd / SCREEN_WIDTH); // next angle
+ }
 }

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/04 11:03:43 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/04 17:52:43 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,40 @@
 # define ROTATION_SPEED 0.025
 # define PLAYER_SPEED 4
 
+typedef struct s_tex
+{
+	mlx_texture_t	*no;
+	mlx_texture_t	*so;
+	mlx_texture_t	*we;
+	mlx_texture_t	*ea;
+}	t_tex;
+
+typedef struct s_texture
+{
+    mlx_texture_t *img;
+    int width;
+    int height;
+} t_texture;
+
+typedef struct s_ray
+{
+	int		index;
+	double	ray_ngl;
+	double	horiz_x;
+	double	horiz_y;
+	double	vert_x;
+	double	vert_y;
+	double	distance;
+	int		flag;
+}	t_ray;
+
 typedef struct s_player
 {
 	int		pixel_x;
 	int		pixel_y;
-	double	angle;
 	char	direction;
+    double	angle;
+	float	fov_rd;
 }	t_player;
 
 typedef struct s_key
@@ -60,6 +88,10 @@ typedef struct s_map
 	char	*id_ea;
 	char	*id_f;
 	char	*id_c;
+t_texture *north_tex;
+t_texture *south_tex;
+t_texture *east_tex;
+t_texture *west_tex;
 	int		color_floor;
 	int		color_ceiling;
 }	t_map;
@@ -79,6 +111,8 @@ typedef struct s_mlx
 	t_check_map	*check_map;
 	t_player	*player;
 	t_key		*key;
+	t_ray		*ray;
+	t_tex		*tex;
 }	t_mlx;
 
 // Map:
@@ -103,7 +137,7 @@ void			cub_player_update_frame(t_mlx *mlx, double move_x,
 					double move_y);
 
 // Render:
-void			cub_cast_rays(t_mlx *mlx);
+void cast_rays(t_mlx *mlx);
 
 // Utils:
 void			*allocate_memory(size_t buffer_size);

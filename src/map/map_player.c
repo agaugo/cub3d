@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/15 10:38:05 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/15 11:22:18 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/04 14:38:28 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	cub_set_player_location(t_mlx *mlx, t_player_start_info *info)
 	mlx->map->player_start_y = info->y;
 	mlx->map->player_start_x = info->x;
 	mlx->player->direction = info->direction;
+	mlx->player->fov_rd = (FOV * M_PI) / 180;
 }
 
 void	cub_check_and_set_player(t_mlx *mlx)
