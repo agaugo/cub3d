@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:06 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/04 12:03:09 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/05 20:48:25 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ void	cub_move_player(t_mlx *mlx, double move_x, double move_y)
 
 	new_player_pixel_x = roundf(mlx->player->pixel_x + move_x);
 	new_player_pixel_y = roundf(mlx->player->pixel_y + move_y);
-	new_map_grid_x = (new_player_pixel_x / mlx->map->tile_size);
-	new_map_grid_y = (new_player_pixel_y / mlx->map->tile_size);
+	new_map_grid_x = (new_player_pixel_x / TILE_SIZE);
+	new_map_grid_y = (new_player_pixel_y / TILE_SIZE);
 	if (cub_is_wall_hit(mlx, new_map_grid_y, new_map_grid_x)
 		&& cub_is_wall_hit(mlx, new_map_grid_y, mlx->player->pixel_x
-			/ mlx->map->tile_size)
+			/ TILE_SIZE)
 		&& cub_is_wall_hit(mlx, mlx->player->pixel_y
-			/ mlx->map->tile_size, new_map_grid_x))
+			/ TILE_SIZE, new_map_grid_x))
 	{
 		mlx->player->pixel_x = new_player_pixel_x;
 		mlx->player->pixel_y = new_player_pixel_y;

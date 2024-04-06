@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:17 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/04 18:11:25 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/06 17:33:36 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,9 @@ void	cub_start_game(t_map *map)
 	mlx.player = ft_calloc(1, sizeof(t_player));
 	mlx.key = ft_calloc(1, sizeof(t_key));
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
-	mlx.tex = ft_calloc(1, sizeof(t_tex));
 	mlx.mlx_p = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D", 0);
 	cub_check_and_set_player(&mlx);
 	cub_set_player_start_position(&mlx);
-	mlx.tex->no = mlx_load_png("textures/texture1.png");
-	mlx.tex->so = mlx_load_png("textures/Mona_Lisa.png");
-	mlx.tex->we = mlx_load_png("textures/texture1.png");
-	mlx.tex->ea = mlx_load_png("textures/Mona_Lisa.png");
 	mlx_loop_hook(mlx.mlx_p, &cub_game_loop, &mlx);
 	mlx_key_hook(mlx.mlx_p, &cub_check_key, &mlx);
 	mlx_loop(mlx.mlx_p);

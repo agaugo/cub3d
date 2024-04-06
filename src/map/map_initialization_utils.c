@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   map.c                                              :+:    :+:            */
+/*   map_initialization_utils.c                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/03 14:51:31 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/03 14:52:02 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/06 17:43:19 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ void	allocate_map_field(t_map *map)
 
 void	finalize_map(t_map *map, int height, int max_width)
 {
+	map->north_texture = mlx_load_png(map->id_no);
+	map->south_texture = mlx_load_png(map->id_so);
+	map->west_texture = mlx_load_png(map->id_we);
+	map->east_texture = mlx_load_png(map->id_ea);
 	map->color_ceiling = cub_parse_rgb_string_to_hex(map->id_c);
 	map->color_floor = cub_parse_rgb_string_to_hex(map->id_f);
 	map->field[height] = NULL;

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/04 17:52:43 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/06 17:42:07 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,13 @@
 # include "../lib/get_next_line/get_next_line.h"
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 
-# define SCREEN_WIDTH 1300
-# define SCREEN_HEIGHT 700
+# define SCREEN_WIDTH 1900
+# define SCREEN_HEIGHT 1000
+# define TILE_SIZE 64
 
 # define FOV 60
 # define ROTATION_SPEED 0.025
 # define PLAYER_SPEED 4
-
-typedef struct s_tex
-{
-	mlx_texture_t	*no;
-	mlx_texture_t	*so;
-	mlx_texture_t	*we;
-	mlx_texture_t	*ea;
-}	t_tex;
-
-typedef struct s_texture
-{
-    mlx_texture_t *img;
-    int width;
-    int height;
-} t_texture;
 
 typedef struct s_ray
 {
@@ -76,24 +62,24 @@ typedef struct s_key
 
 typedef struct s_map
 {
-	char	**field;
-	int		player_start_x;
-	int		player_start_y;
-	int		width;
-	int		height;
-	int		tile_size;
-	char	*id_no;
-	char	*id_so;
-	char	*id_we;
-	char	*id_ea;
-	char	*id_f;
-	char	*id_c;
-t_texture *north_tex;
-t_texture *south_tex;
-t_texture *east_tex;
-t_texture *west_tex;
-	int		color_floor;
-	int		color_ceiling;
+	char			**field;
+	int				player_start_x;
+	int				player_start_y;
+	int				width;
+	int				height;
+	int				tile_size;
+	char			*id_no;
+	char			*id_so;
+	char			*id_ea;
+	char			*id_we;
+	char			*id_f;
+	char			*id_c;
+	mlx_texture_t	*north_texture;
+	mlx_texture_t	*south_texture;
+	mlx_texture_t	*east_texture;
+	mlx_texture_t	*west_texture;
+	int				color_floor;
+	int				color_ceiling;
 }	t_map;
 
 typedef struct s_check_map
@@ -112,7 +98,6 @@ typedef struct s_mlx
 	t_player	*player;
 	t_key		*key;
 	t_ray		*ray;
-	t_tex		*tex;
 }	t_mlx;
 
 // Map:
