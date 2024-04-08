@@ -6,16 +6,11 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/06 18:17:39 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/07 13:14:55 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
-
-int	get_rgba(int r, int g, int b, int a)
-{
-	return (r << 24 | g << 16 | b << 8 | a << 0);
-}
 
 int	reverse_bytes(int c)
 {
