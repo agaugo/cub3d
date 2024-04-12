@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/12 13:47:33 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/12 14:20:52 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void draw_line(t_mlx *mlx, int x0, int y0, int x1, int y1, int color) {
 
 int IsWall(t_mlx *mlx, int x, int y) {
     // Convert the x and y pixel coordinates to map grid coordinates
-    int mapGridX = x / pixel_width_per_square;
-    int mapGridY = y / pixel_height_per_square;
+    int mapGridX = x / mlx->map->pixel_width_per_square;
+    int mapGridY = y / mlx->map->pixel_height_per_square;
 
     // Check if the calculated map grid coordinates are out of bounds
     if (mapGridX < 0 || mapGridX >= mlx->map->width || mapGridY < 0 || mapGridY >= mlx->map->height) {
@@ -91,15 +91,15 @@ void draw_rays(t_mlx *mlx) {
         int foundHorzWallHit = 0;
         
         // Calculate horizontal distance to the first intersection...
-        double yintercept = floor(mlx->player->pixel_y / pixel_height_per_square) * pixel_height_per_square;
-        yintercept += isRayFacingDown ? pixel_height_per_square : 0;
+        double yintercept = floor(mlx->player->pixel_y / mlx->map->pixel_height_per_square) * mlx->map->pixel_height_per_square;
+        yintercept += isRayFacingDown ? mlx->map->pixel_height_per_square : 0;
         double xintercept = mlx->player->pixel_x + (yintercept - mlx->player->pixel_y) / tan(ray_angle);
         
         // Calculate the increments for each step
-        double ystep = pixel_height_per_square;
+        double ystep = mlx->map->pixel_height_per_square;
         ystep *= isRayFacingDown ? 1 : -1;
         
-        double xstep = pixel_height_per_square / tan(ray_angle);
+        double xstep = mlx->map->pixel_height_per_square / tan(ray_angle);
         xstep *= (isRayFacingRight && xstep < 0) ? -1 : 1;
         xstep *= (!isRayFacingRight && xstep > 0) ? -1 : 1;
         
@@ -127,15 +127,15 @@ void draw_rays(t_mlx *mlx) {
         int foundVertWallHit = 0;
         
         // Calculate vertical distance to the first intersection...
-        double xintercept_vert = floor(mlx->player->pixel_x / pixel_width_per_square) * pixel_width_per_square;
-        xintercept_vert += isRayFacingRight ? pixel_width_per_square : 0;
+        double xintercept_vert = floor(mlx->player->pixel_x / mlx->map->pixel_width_per_square) * mlx->map->pixel_width_per_square;
+        xintercept_vert += isRayFacingRight ? mlx->map->pixel_width_per_square : 0;
         double yintercept_vert = mlx->player->pixel_y + (xintercept_vert - mlx->player->pixel_x) * tan(ray_angle);
         
         // Calculate the increments for each step
-        double xstep_vert = pixel_width_per_square;
+        double xstep_vert = mlx->map->pixel_width_per_square;
         xstep_vert *= isRayFacingRight ? 1 : -1;
         
-        double ystep_vert = pixel_width_per_square * tan(ray_angle);
+        double ystep_vert = mlx->map->pixel_width_per_square * tan(ray_angle);
         ystep_vert *= (isRayFacingDown && ystep_vert < 0) ? -1 : 1;
         ystep_vert *= (!isRayFacingDown && ystep_vert > 0) ? -1 : 1;
 
@@ -176,7 +176,7 @@ void draw_rays(t_mlx *mlx) {
         perpDistance *= cos(ray_angle - mlx->player->angle); // Correct fish-eye effect
 
         // Determine the height of the wall slice
-        double wallSliceHeight = (perpDistance > 0) ? (pixel_height_per_square / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
+        double wallSliceHeight = (perpDistance > 0) ? (mlx->map->pixel_height_per_square / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
 
         // Calculate the top and bottom positions for the wall slice
         int drawStart = -wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
@@ -219,9 +219,9 @@ void draw_player(t_mlx *mlx, int player_x, int player_y, int size, int color) {
 //     //     for (int map_x = 0; map_x < mlx->map->width; map_x++) {
 //     //         char cell = mlx->map->field[map_y][map_x];
 //     //         color = (cell == '1') ? 0xFF0000 : (cell == '0') || (cell == 'P') ? 0x0000FF : 0xFFFF00; // Red for '1', blue for '0'
-//     //         for (y = 0; y < pixel_height_per_square; y++) {
-//     //             for (x = 0; x < pixel_width_per_square; x++) {
-//     //                 my_mlx_pixel_put(mlx, map_x * pixel_width_per_square + x, map_y * pixel_height_per_square + y, color);
+//     //         for (y = 0; y < mlx->map->pixel_height_per_square; y++) {
+//     //             for (x = 0; x < mlx->map->pixel_width_per_square; x++) {
+//     //                 my_mlx_pixel_put(mlx, map_x * mlx->map->pixel_width_per_square + x, map_y * pixel_height_per_square + y, color);
 //     //             }
 //     //         }
 //     //     }
@@ -236,15 +236,15 @@ void draw_player(t_mlx *mlx, int player_x, int player_y, int size, int color) {
 
 
 // // void calculate_pixel_size(t_mlx *mlx) {
-// //     int pixel_width_per_square;
-// //     int pixel_height_per_square;
+// //     int mlx->map->pixel_width_per_square;
+// //     int mlx->map->pixel_height_per_square;
 
 // //     // Calculate the pixel size of each square
-// //     pixel_width_per_square = SCREEN_WIDTH / mlx->map->width;
+// //     mlx->map->pixel_width_per_square = SCREEN_WIDTH / mlx->map->width;
 // //     pixel_height_per_square = SCREEN_HEIGHT / mlx->map->height;
 
 // //     // Print the calculated pixel size for debugging
-// //     printf("Pixel Width per Square: %d\n", pixel_width_per_square);
+// //     printf("Pixel Width per Square: %d\n", mlx->map->pixel_width_per_square);
 // //     printf("Pixel Height per Square: %d\n", pixel_height_per_square);
 // // }
 

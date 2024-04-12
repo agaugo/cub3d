@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/12 13:42:46 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/12 14:20:02 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@
 # define FOV 60
 # define ROTATION_SPEED 0.025
 # define PLAYER_SPEED 4
-
-#define MAP_WIDTH 24  // based on the number of columns in your map
-#define MAP_HEIGHT 6   // based on the number of rows in your map
-#define pixel_width_per_square (SCREEN_WIDTH / MAP_WIDTH)
-#define pixel_height_per_square (SCREEN_HEIGHT / MAP_HEIGHT)
 
 typedef struct s_ray
 {
@@ -85,6 +80,8 @@ typedef struct s_map
 	mlx_texture_t	*west_texture;
 	int				color_floor;
 	int				color_ceiling;
+	int				pixel_width_per_square;
+	int				pixel_height_per_square;
 }	t_map;
 
 typedef struct s_check_map
