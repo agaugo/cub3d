@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/12 14:20:02 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/19 12:37:42 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void			cub_handle_error(int exit_code, char *message);
 void			cub_exit(t_mlx *mlx);
 
 
-
+void cub_cast_rays(t_mlx *mlx);
 void draw_rays(t_mlx *mlx);
 
 #endif
