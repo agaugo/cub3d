@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/03 14:51:31 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/12 14:17:59 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/19 12:52:35 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	finalize_map(t_map *map, int height, int max_width)
 	map->field[height] = NULL;
 	map->height = height;
 	map->width = max_width;
-    map->pixel_width_per_square = SCREEN_WIDTH / max_width;
-    map->pixel_height_per_square = SCREEN_HEIGHT / height;
+    map->pixel_width_per_square = TILE_SIZE;
+    map->pixel_height_per_square = TILE_SIZE;
 	map->tile_size = cub_get_tile_size(map);
 }
 

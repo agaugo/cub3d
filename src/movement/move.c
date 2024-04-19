@@ -6,45 +6,39 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:06 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/18 14:39:27 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/19 12:58:03 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-int	cub_is_wall_hit(t_mlx *mlx, int map_grid_x, int map_grid_y)
+int	cub_is_wall_hit(t_mlx *mlx, int map_grid_y, int map_grid_x)
 {
-    if (map_grid_x < 0 || map_grid_x >= mlx->map->width ||
-        map_grid_y < 0 || map_grid_y >= mlx->map->height) {
-        return 1; // Out of bounds is treated as a wall
-    }
-    return (mlx->map->field[map_grid_y][map_grid_x] == '1'); // '1' is a wall
+	if (mlx->map->field[map_grid_y][map_grid_x] != '1')
+		return (1);
+	return (0);
 }
 
-// Move the player if the next position is not a wall
 void	cub_move_player(t_mlx *mlx, double move_x, double move_y)
 {
-    int new_player_pixel_x = (int)(mlx->player->pixel_x + move_x);
-    int new_player_pixel_y = (int)(mlx->player->pixel_y + move_y);
-    
-	        int pixel_height_per_square;
-    int pixel_width_per_square;
+	int	new_map_grid_y;
+	int	new_map_grid_x;
+	int	new_player_pixel_x;
+	int	new_player_pixel_y;
 
-    // Calculate the pixel size of each square
-    pixel_width_per_square = SCREEN_WIDTH / mlx->map->width;
-    pixel_height_per_square = SCREEN_HEIGHT / mlx->map->height;
-	
-    // Convert pixel position to grid coordinates
-    int new_map_grid_x = new_player_pixel_x / pixel_width_per_square;
-    int new_map_grid_y = new_player_pixel_y / pixel_height_per_square;
-    
-    // Check the grid coordinates the player is trying to move to
-    if (!cub_is_wall_hit(mlx, new_map_grid_x, new_map_grid_y))
-    {
-        // No wall hit, update player position
-        mlx->player->pixel_x = new_player_pixel_x;
-        mlx->player->pixel_y = new_player_pixel_y;
-    }
+	new_player_pixel_x = roundf(mlx->player->pixel_x + move_x);
+	new_player_pixel_y = roundf(mlx->player->pixel_y + move_y);
+	new_map_grid_x = (new_player_pixel_x / TILE_SIZE);
+	new_map_grid_y = (new_player_pixel_y / TILE_SIZE);
+	if (cub_is_wall_hit(mlx, new_map_grid_y, new_map_grid_x)
+		&& cub_is_wall_hit(mlx, new_map_grid_y, mlx->player->pixel_x
+			/ TILE_SIZE)
+		&& cub_is_wall_hit(mlx, mlx->player->pixel_y
+			/ TILE_SIZE, new_map_grid_x))
+	{
+		mlx->player->pixel_x = new_player_pixel_x;
+		mlx->player->pixel_y = new_player_pixel_y;
+	}
 }
 
 void	cub_rotate_player(t_mlx *mlx)
