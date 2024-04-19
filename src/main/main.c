@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:17 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/12 13:41:25 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/19 12:37:54 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	cub_game_loop(void *parsed_mlx)
 	mlx_delete_image(mlx->mlx_p, mlx->img);
 	mlx->img = mlx_new_image(mlx->mlx_p, SCREEN_WIDTH, SCREEN_HEIGHT);
 	cub_player_update_frame(mlx, 0, 0);
-	draw_rays(mlx);
-	// cast_rays(mlx);
+	cub_cast_rays(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 }
 

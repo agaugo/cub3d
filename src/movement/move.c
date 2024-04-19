@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:06 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/18 14:39:27 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/18 18:40:14 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	cub_is_wall_hit(t_mlx *mlx, int map_grid_x, int map_grid_y)
 {
     if (map_grid_x < 0 || map_grid_x >= mlx->map->width ||
         map_grid_y < 0 || map_grid_y >= mlx->map->height) {
-        return 1; // Out of bounds is treated as a wall
+        return 1;
     }
-    return (mlx->map->field[map_grid_y][map_grid_x] == '1'); // '1' is a wall
+    return (mlx->map->field[map_grid_y][map_grid_x] == '1');
 }
 
 // Move the player if the next position is not a wall
@@ -27,7 +27,7 @@ void	cub_move_player(t_mlx *mlx, double move_x, double move_y)
     int new_player_pixel_x = (int)(mlx->player->pixel_x + move_x);
     int new_player_pixel_y = (int)(mlx->player->pixel_y + move_y);
     
-	        int pixel_height_per_square;
+	int pixel_height_per_square;
     int pixel_width_per_square;
 
     // Calculate the pixel size of each square
