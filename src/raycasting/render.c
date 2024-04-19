@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/19 13:44:49 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/19 16:15:04 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,21 @@ void my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color) {
 
 double distance_between_points(double x1, double y1, double x2, double y2) {
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+int get_color_variant(int color, int dark) {
+    int a = (color >> 24) & 0xFF;  // Extract alpha channel
+    int r = (color >> 16) & 0xFF;  // Extract red channel
+    int g = (color >> 8) & 0xFF;   // Extract green channel
+    int b = color & 0xFF;          // Extract blue channel
+
+    // Adjust brightness by 20% for dark or light
+    float factor = dark ? 0.8 : 1.2;
+    r = fmin(255, r * factor);
+    g = fmin(255, g * factor);
+    b = fmin(255, b * factor);
+
+    return (a << 24) | (r << 16) | (g << 8) | b;  // Reconstruct as RGBA
 }
 
 void draw_line(t_mlx *mlx, int x0, int y0, int x1, int y1, int color) {
@@ -141,15 +156,32 @@ void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float D
     int drawEnd = wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
     drawEnd = drawEnd >= SCREEN_HEIGHT ? SCREEN_HEIGHT - 1 : drawEnd;
 
-    int wallColor = (horzHitDistance < vertHitDistance)
-        ? ((isRayFacingDown) ? 0xFF0000FF : 0x00FF00FF)
-        : ((isRayFacingRight) ? 0x0000FFFF : 0xFFFF00FF);
+    // int wallColor = (horzHitDistance < vertHitDistance)
+    //     ? ((isRayFacingDown) ? 0xFF0000FF : 0x00FF00FF)
+    //     : ((isRayFacingRight) ? 0x0000FFFF : 0xFFFF00FF);
 
     // Draw the ceiling in white above the wall
     for (int y = 0; y < drawStart; y++) {
         my_mlx_pixel_put(mlx, ray_num, y, mlx->map->color_ceiling);
     }
     
+    double wallHitX = (horzHitDistance < vertHitDistance) ? horzHitX : vertHitX;
+    double wallHitY = (horzHitDistance < vertHitDistance) ? horzHitY : vertHitY;
+
+    // Base color determination with added alpha component (fully opaque)
+    int baseColor = (horzHitDistance < vertHitDistance)
+        ? ((isRayFacingDown) ? 0xFF0000FF : 0x00FF00FF)  // Adjust these as needed
+        : ((isRayFacingRight) ? 0x0000FFFF : 0xFFFF00FF);
+
+    // Determine the segment of the wall (dark or light)
+    int tileIndexX = (int)floor(wallHitX / TILE_SIZE) % 2;
+    int tileIndexY = (int)floor(wallHitY / TILE_SIZE) % 2;
+    int useDarkColor = (tileIndexX + tileIndexY) % 2;  // Alternate based on X and Y indices
+
+    // Get the correct variant of the color
+    int wallColor = get_color_variant(baseColor, useDarkColor);
+
+    // Existing code to draw the wall...
     for (int y = drawStart; y < drawEnd; y++) {
         my_mlx_pixel_put(mlx, ray_num, y, wallColor);
     }
