@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/19 16:15:04 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/20 21:04:22 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ int IsWall(t_mlx *mlx, int x, int y) {
     }
 
     return 0;
+}
+
+mlx_texture_t* select_texture(t_mlx *mlx, double horzHitDistance, double vertHitDistance, int isRayFacingDown, int isRayFacingRight) {
+    if (horzHitDistance < vertHitDistance) {
+        return isRayFacingDown ? mlx->map->south_texture : mlx->map->north_texture;
+    } else {
+        return isRayFacingRight ? mlx->map->east_texture : mlx->map->west_texture;
+    }
 }
 
 void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float DIST_TO_PROJ_PLANE)
@@ -146,46 +154,39 @@ void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float D
         ? distance_between_points(mlx->player->pixel_x, mlx->player->pixel_y, vertHitX, vertHitY)
         : INFINITY;
 
+    // Correct the fisheye effect
     double perpDistance = (horzHitDistance < vertHitDistance) ? horzHitDistance : vertHitDistance;
     perpDistance *= cos(ray_angle - mlx->player->angle);
 
-    double wallSliceHeight = (perpDistance > 0) ? (mlx->map->pixel_height_per_square / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
+    // Wall slice height calculation
+    double wallSliceHeight = (perpDistance > 0) ? (TILE_SIZE / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
 
     int drawStart = -wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
     drawStart = drawStart < 0 ? 0 : drawStart;
     int drawEnd = wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
     drawEnd = drawEnd >= SCREEN_HEIGHT ? SCREEN_HEIGHT - 1 : drawEnd;
 
-    // int wallColor = (horzHitDistance < vertHitDistance)
-    //     ? ((isRayFacingDown) ? 0xFF0000FF : 0x00FF00FF)
-    //     : ((isRayFacingRight) ? 0x0000FFFF : 0xFFFF00FF);
+    mlx_texture_t *texture = select_texture(mlx, horzHitDistance, vertHitDistance, isRayFacingDown, isRayFacingRight);
+    int hitVertical = (vertHitDistance < horzHitDistance);
+    double wallHitPos = (hitVertical) ? vertHitY : horzHitX;
+    int texture_x = ((int)wallHitPos % TILE_SIZE) * texture->width / TILE_SIZE;
 
+    // Vertical texture coordinates
+    double texturePos = ((drawStart - SCREEN_HEIGHT / 2 + wallSliceHeight / 2) * texture->height) / wallSliceHeight;
+    double textureStep = (double)texture->height / wallSliceHeight;
+
+    for (int y = drawStart; y < drawEnd; y++) {
+        int texY = (int)texturePos % texture->height;
+        texturePos += textureStep;
+        uint32_t texel = ((uint32_t *)texture->pixels)[texY * texture->width + texture_x];
+        my_mlx_pixel_put(mlx, ray_num, y, texel);
+    }
+    
     // Draw the ceiling in white above the wall
     for (int y = 0; y < drawStart; y++) {
         my_mlx_pixel_put(mlx, ray_num, y, mlx->map->color_ceiling);
     }
     
-    double wallHitX = (horzHitDistance < vertHitDistance) ? horzHitX : vertHitX;
-    double wallHitY = (horzHitDistance < vertHitDistance) ? horzHitY : vertHitY;
-
-    // Base color determination with added alpha component (fully opaque)
-    int baseColor = (horzHitDistance < vertHitDistance)
-        ? ((isRayFacingDown) ? 0xFF0000FF : 0x00FF00FF)  // Adjust these as needed
-        : ((isRayFacingRight) ? 0x0000FFFF : 0xFFFF00FF);
-
-    // Determine the segment of the wall (dark or light)
-    int tileIndexX = (int)floor(wallHitX / TILE_SIZE) % 2;
-    int tileIndexY = (int)floor(wallHitY / TILE_SIZE) % 2;
-    int useDarkColor = (tileIndexX + tileIndexY) % 2;  // Alternate based on X and Y indices
-
-    // Get the correct variant of the color
-    int wallColor = get_color_variant(baseColor, useDarkColor);
-
-    // Existing code to draw the wall...
-    for (int y = drawStart; y < drawEnd; y++) {
-        my_mlx_pixel_put(mlx, ray_num, y, wallColor);
-    }
-
         // Draw the floor in brown below the wall
     for (int y = drawEnd; y < SCREEN_HEIGHT; y++) {
         my_mlx_pixel_put(mlx, ray_num, y, mlx->map->color_floor);
