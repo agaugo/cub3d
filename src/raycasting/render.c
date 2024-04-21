@@ -6,11 +6,14 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/20 21:04:22 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/21 19:16:45 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
+
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b))
 
 #define RAY_LENGTH 100000
 
@@ -79,6 +82,25 @@ mlx_texture_t* select_texture(t_mlx *mlx, double horzHitDistance, double vertHit
         return isRayFacingDown ? mlx->map->south_texture : mlx->map->north_texture;
     } else {
         return isRayFacingRight ? mlx->map->east_texture : mlx->map->west_texture;
+    }
+}
+
+void draw_textured_column(t_mlx *mlx, int x, int drawStart, int drawEnd, mlx_texture_t *texture, double wallHitPos, double wallSliceHeight) {
+    // Calculate texture_x based on the exact hit position and the texture width
+    int texture_x = (int)(fmod(wallHitPos, TILE_SIZE) / TILE_SIZE * texture->width);
+
+    // Calculate the step to iterate over the texture vertically
+    double textureStep = texture->height / wallSliceHeight;
+
+    // Starting texture position (vertical offset) based on the middle of the slice
+    double texturePos = (drawStart - SCREEN_HEIGHT / 2 + wallSliceHeight / 2) * textureStep;
+
+    // Sample the texture vertically and map to the column
+    for (int y = drawStart; y < drawEnd; y++) {
+        int texY = (int)texturePos % texture->height;
+        uint32_t texel = ((uint32_t*)texture->pixels)[texY * texture->width + texture_x];
+        my_mlx_pixel_put(mlx, x, y, texel);
+        texturePos += textureStep;
     }
 }
 
@@ -154,34 +176,24 @@ void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float D
         ? distance_between_points(mlx->player->pixel_x, mlx->player->pixel_y, vertHitX, vertHitY)
         : INFINITY;
 
-    // Correct the fisheye effect
-    double perpDistance = (horzHitDistance < vertHitDistance) ? horzHitDistance : vertHitDistance;
-    perpDistance *= cos(ray_angle - mlx->player->angle);
-
-    // Wall slice height calculation
-    double wallSliceHeight = (perpDistance > 0) ? (TILE_SIZE / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
-
-    int drawStart = -wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
-    drawStart = drawStart < 0 ? 0 : drawStart;
-    int drawEnd = wallSliceHeight / 2 + SCREEN_HEIGHT / 2;
-    drawEnd = drawEnd >= SCREEN_HEIGHT ? SCREEN_HEIGHT - 1 : drawEnd;
-
-    mlx_texture_t *texture = select_texture(mlx, horzHitDistance, vertHitDistance, isRayFacingDown, isRayFacingRight);
     int hitVertical = (vertHitDistance < horzHitDistance);
-    double wallHitPos = (hitVertical) ? vertHitY : horzHitX;
-    int texture_x = ((int)wallHitPos % TILE_SIZE) * texture->width / TILE_SIZE;
 
-    // Vertical texture coordinates
-    double texturePos = ((drawStart - SCREEN_HEIGHT / 2 + wallSliceHeight / 2) * texture->height) / wallSliceHeight;
-    double textureStep = (double)texture->height / wallSliceHeight;
+    // Determine which texture to use based on the ray hit
+    mlx_texture_t *texture = select_texture(mlx, horzHitDistance, vertHitDistance, isRayFacingDown, isRayFacingRight);
 
-    for (int y = drawStart; y < drawEnd; y++) {
-        int texY = (int)texturePos % texture->height;
-        texturePos += textureStep;
-        uint32_t texel = ((uint32_t *)texture->pixels)[texY * texture->width + texture_x];
-        my_mlx_pixel_put(mlx, ray_num, y, texel);
-    }
-    
+    // Calculate the wall slice height and positions
+    double perpDistance = min(horzHitDistance, vertHitDistance) * cos(ray_angle - mlx->player->angle); // correct for fisheye effect
+    double wallSliceHeight = (perpDistance > 0) ? (TILE_SIZE / perpDistance) * DIST_TO_PROJ_PLANE : SCREEN_HEIGHT;
+    int drawStart = max(0, SCREEN_HEIGHT / 2 - (int)(wallSliceHeight / 2));
+    int drawEnd = min(SCREEN_HEIGHT - 1, SCREEN_HEIGHT / 2 + (int)(wallSliceHeight / 2));
+
+    // Determine the exact position on the texture
+    double wallHitPos = hitVertical ? vertHitY : horzHitX;
+
+    // Draw the textured column
+    draw_textured_column(mlx, ray_num, drawStart, drawEnd, texture, wallHitPos, wallSliceHeight);
+
+
     // Draw the ceiling in white above the wall
     for (int y = 0; y < drawStart; y++) {
         my_mlx_pixel_put(mlx, ray_num, y, mlx->map->color_ceiling);
