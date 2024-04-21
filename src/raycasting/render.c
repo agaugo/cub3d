@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/21 19:16:45 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/21 19:27:33 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
 #define RAY_LENGTH 100000
+
+int reverse_bytes(int color) {
+    return ((color & 0xFF) << 24) |         // Move the first byte to the last
+           ((color & 0xFF00) << 8) |        // Move the second byte to the third
+           ((color & 0xFF0000) >> 8) |      // Move the third byte to the second
+           ((color & 0xFF000000) >> 24);    // Move the last byte to the first
+}
+
 
 int	get_rgba(int r, int g, int b, int a)
 {
@@ -98,8 +106,8 @@ void draw_textured_column(t_mlx *mlx, int x, int drawStart, int drawEnd, mlx_tex
     // Sample the texture vertically and map to the column
     for (int y = drawStart; y < drawEnd; y++) {
         int texY = (int)texturePos % texture->height;
-        uint32_t texel = ((uint32_t*)texture->pixels)[texY * texture->width + texture_x];
-        my_mlx_pixel_put(mlx, x, y, texel);
+        // uint32_t texel = ;
+        my_mlx_pixel_put(mlx, x, y, reverse_bytes(((uint32_t*)texture->pixels)[texY * texture->width + texture_x]));
         texturePos += textureStep;
     }
 }
