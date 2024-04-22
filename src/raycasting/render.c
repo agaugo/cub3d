@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/07 17:30:23 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/21 19:27:33 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/22 23:41:24 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,9 @@ void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float D
     double nextHorzTouchX = xintercept;
     double nextHorzTouchY = yintercept;
 
-    while (nextHorzTouchX >= 0 && nextHorzTouchX <= SCREEN_WIDTH && nextHorzTouchY >= 0 && nextHorzTouchY <= SCREEN_HEIGHT) {
-        if (IsWall(mlx, nextHorzTouchX, isRayFacingDown ? nextHorzTouchY : nextHorzTouchY - 1)) {
+    while (nextHorzTouchX >= 0 && nextHorzTouchX < mlx->map->width * mlx->map->pixel_width_per_square &&
+           nextHorzTouchY >= 0 && nextHorzTouchY < mlx->map->height * mlx->map->pixel_height_per_square) {
+        if (IsWall(mlx, nextHorzTouchX, nextHorzTouchY - (isRayFacingDown ? 0 : 1))) {
             horzHitX = nextHorzTouchX;
             horzHitY = nextHorzTouchY;
             foundHorzWallHit = 1;
@@ -165,8 +166,9 @@ void cub_cast_single_ray(t_mlx *mlx, float ray_angle, int ray_num, const float D
     double nextVertTouchX = xintercept_vert;
     double nextVertTouchY = yintercept_vert;
 
-    while (nextVertTouchX >= 0 && nextVertTouchX <= SCREEN_WIDTH && nextVertTouchY >= 0 && nextVertTouchY <= SCREEN_HEIGHT) {
-        if (IsWall(mlx, isRayFacingRight ? nextVertTouchX : nextVertTouchX - 1, nextVertTouchY)) {
+    while (nextVertTouchX >= 0 && nextVertTouchX < mlx->map->width * mlx->map->pixel_width_per_square &&
+           nextVertTouchY >= 0 && nextVertTouchY < mlx->map->height * mlx->map->pixel_height_per_square) {
+        if (IsWall(mlx, nextVertTouchX - (isRayFacingRight ? 0 : 1), nextVertTouchY)) {
             vertHitX = nextVertTouchX;
             vertHitY = nextVertTouchY;
             foundVertWallHit = 1;
