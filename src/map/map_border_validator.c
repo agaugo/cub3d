@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:53:14 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/19 00:18:17 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/23 13:25:50 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,15 @@ int	cub_check_surroundings(t_check_map *check_map, int x, int y)
 		j = -1;
 		while (j <= 1)
 		{
-			if (!((i == 0 && j == 0)
-					|| cub_is_out_of_bounds(check_map, x + i, y + j)))
+			if ((i == 0 || j == 0) && !(i == 0 && j == 0))
 			{
-				adjacent = check_map->field[x + i][y + j];
-				if (adjacent != '1' && adjacent != '.' && adjacent != '\n'
-					&& adjacent != '\0')
-					return (1);
+				if (!cub_is_out_of_bounds(check_map, x + i, y + j))
+				{
+					adjacent = check_map->field[x + i][y + j];
+					if (adjacent != '1' && adjacent != '.' && adjacent != '\n' \
+						&& adjacent != '\0')
+						return (1);
+				}
 			}
 			j++;
 		}

@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:20:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/03/20 21:14:24 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/23 14:43:08 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // void	cub_print_modified_map(t_check_map *check_map)
 // {
 // 	int	i;
-//
+
 // 	i = 0;
 // 	while (i < check_map->height)
 // 	{
@@ -48,33 +48,42 @@ void	cub_set_mods(t_map *map, t_check_map *check_map)
 	check_map->height = map->height + 2;
 }
 
-void	cub_set_dots(t_map *map, t_check_map *check_map)
+void	cub_place_dots(t_map *map, t_check_map *check_map, int i)
 {
-	int	i;
 	int	j;
 
-	i = 0;
 	while (i < map->height)
 	{
-		check_map->field[i + 1] = (char *)ft_calloc(check_map->width + 1,
-				sizeof(char));
+		check_map->field[i + 1] = ft_calloc(check_map->width + 1, sizeof(char));
 		check_map->field[i + 1][0] = '.';
-		check_map->field[i + 1][check_map->width - 1] = '.';
 		j = 0;
-		while (j++ < (int)ft_strlen(map->field[i]))
+		while (j < (int)ft_strlen(map->field[i]))
 		{
-			check_map->field[i + 1][j + 1] = map->field[i][j];
 			if (map->field[i][j] == ' ')
 				check_map->field[i + 1][j + 1] = '.';
+			else
+				check_map->field[i + 1][j + 1] = map->field[i][j];
+			j++;
 		}
-		j = ft_strlen(map->field[i]) + 1;
+		j = (ft_strlen(map->field[i]) + 1);
 		while (j < check_map->width - 1)
 		{
 			check_map->field[i + 1][j] = '.';
 			j++;
 		}
+		check_map->field[i + 1][check_map->width - 1] = '.';
 		i++;
 	}
+}
+
+void	cub_set_dots(t_map *map, t_check_map *check_map)
+{
+	check_map->field[0] = (char *)ft_calloc(check_map->width + 1, sizeof(char));
+	ft_memset(check_map->field[0], '.', check_map->width);
+	cub_place_dots(map, check_map, 0);
+	check_map->field[check_map->height - 1] = \
+		(char *)ft_calloc(check_map->width + 1, sizeof(char));
+	ft_memset(check_map->field[check_map->height - 1], '.', check_map->width);
 }
 
 int	cub_setup_map_checks(t_map *map, t_check_map *check_map)

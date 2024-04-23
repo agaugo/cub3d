@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/22 23:44:19 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/23 13:24:50 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_player
 	int		pixel_x;
 	int		pixel_y;
 	char	direction;
-    double	angle;
+	double	angle;
 	float	fov_rd;
 }	t_player;
 
@@ -124,7 +124,7 @@ void			cub_player_update_frame(t_mlx *mlx, double move_x,
 					double move_y);
 
 // Render:
-void cast_rays(t_mlx *mlx);
+void			cub_cast_rays(t_mlx *mlx);
 
 // Utils:
 void			*allocate_memory(size_t buffer_size);
@@ -132,8 +132,5 @@ void			*memory_realloc(void *ptr, size_t new_size);
 void			free_memory(void *buffer);
 void			cub_handle_error(int exit_code, char *message);
 void			cub_exit(t_mlx *mlx);
-
-
-void cub_cast_rays(t_mlx *mlx);
 
 #endif
