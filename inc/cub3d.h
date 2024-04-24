@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/23 13:24:50 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/24 15:41:59 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,18 @@
 
 typedef struct s_ray
 {
-	int		index;
-	double	ray_ngl;
-	double	horiz_x;
-	double	horiz_y;
-	double	vert_x;
-	double	vert_y;
-	double	distance;
-	int		flag;
+	float			ray_angle;
+	float			angle_increment;
+	float			distance_to_proj_plane;
+	int				ray_num;
+	int				is_ray_facing_down;
+	int				is_ray_facing_right;
+	int				draw_start;
+	int				draw_end;
+	mlx_texture_t	*texture;
+	double			wall_hit_pos;
+	double			wall_slice_height;
+	double			perp_distance;
 }	t_ray;
 
 typedef struct s_player
