@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 11:52:59 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/24 15:41:59 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/25 00:49:41 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ typedef struct s_ray
 	double			wall_hit_pos;
 	double			wall_slice_height;
 	double			perp_distance;
+	double			horz_hit_x;
+	double			vert_hit_y;
+	double			horz_hit_distance;
+	double			vert_hit_distance;
 }	t_ray;
 
 typedef struct s_player
@@ -129,6 +133,18 @@ void			cub_player_update_frame(t_mlx *mlx, double move_x,
 
 // Render:
 void			cub_cast_rays(t_mlx *mlx);
+void			cub_pixel_put(t_mlx *mlx, int x, int y, int color);
+int				cub_is_wall(t_mlx *mlx, int x, int y);
+double			cub_calc_distance_between_points(double x1, double y1, \
+					double x2, double y2);
+int				cub_max(int a, int b);
+int				cub_min(int a, int b);
+mlx_texture_t	*cub_select_texture(t_mlx *mlx, t_ray *ray, \
+					double horz_hit_distance, double vert_hit_distance);
+double			cub_calculate_horizontal_collision(t_mlx *mlx, t_ray *ray);
+double			cub_calculate_vertical_collision(t_mlx *mlx, t_ray *ray);
+void			cub_draw_ray(t_mlx *mlx, t_ray *ray);
+void			cub_calculate_wall_position_and_height(t_mlx *mlx, t_ray *ray);
 
 // Utils:
 void			*allocate_memory(size_t buffer_size);
