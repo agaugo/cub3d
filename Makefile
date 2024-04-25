@@ -6,7 +6,27 @@ GNL		:= ./lib/get_next_line/get_next_line.a
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include
 LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl `pkg-config --libs glfw3` -pthread -lm
-SRCS	:= $(shell find src -iname "*.c")
+SRCS := \
+	src/main/main.c \
+	src/map/map_border_validator.c \
+	src/map/map_color_utils.c \
+	src/map/map_initialization_utils.c \
+	src/map/map_load_values.c \
+	src/map/map_player.c \
+	src/map/map_processing_utils.c \
+	src/map/map_setup.c \
+	src/map/map_validate.c \
+	src/movement/key_check.c \
+	src/movement/move.c \
+	src/raycasting/render_calc.c \
+	src/raycasting/render_draw.c \
+	src/raycasting/render_horizontal.c \
+	src/raycasting/render_ray.c \
+	src/raycasting/render_utils.c \
+	src/raycasting/render_vertical.c \
+	src/utils/error.c \
+	src/utils/free.c \
+	src/utils/memory.c
 OBJS	:= $(SRCS:%.c=objs/%.o)
 OBJS_DIR = objs/
 
@@ -16,9 +36,9 @@ YELLOW = \033[1;33m
 BLUE = \033[1;34m
 RESET = \033[0m
 
-all: libmlx $(NAME)
+all: $(LIBMLX)/build/libmlx42.a $(NAME)
 
-libmlx:
+$(LIBMLX)/build/libmlx42.a:
 	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 
 $(NAME): $(OBJS) $(LIBFT) $(GNL)
