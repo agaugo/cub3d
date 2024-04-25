@@ -82,7 +82,7 @@ clean:
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME) executable...$(RESET)"
-	@rm -f libft*.a
+	@rm -f $(NAME)
 
 re: fclean all
 

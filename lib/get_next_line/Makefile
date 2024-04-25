@@ -34,7 +34,7 @@ clean:
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME) executable...$(RESET)"
-	@rm -f get_next_line*.a
+	@rm -f $(NAME)
 
 re: fclean all
 
