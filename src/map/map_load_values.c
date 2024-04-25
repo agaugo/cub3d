@@ -6,7 +6,7 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/03/06 12:02:26 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/05 20:49:39 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/25 12:28:47 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ t_map	*cub_load_map_values(char *file)
 	int		fd;
 	t_map	*map;
 
-	map = init_map_and_open_file(file, &fd);
-	allocate_map_field(map);
-	process_lines(fd, map);
+	map = cub_init_map_and_open_file(file, &fd);
+	cub_allocate_map_field(map);
+	cub_process_lines(fd, map);
 	close(fd);
 	return (map);
 }

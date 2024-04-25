@@ -6,62 +6,62 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/03 14:52:36 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/06 17:43:45 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/25 14:30:34 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-char	*trim_whitespace(char *str)
+char	*cub_trim_whitespace(char *str)
 {
 	char	*start;
 	char	*end;
 	char	*result;
 
-	while (isspace((unsigned char)*str))
+	while (ft_isspace((unsigned char)*str))
 		str++;
 	start = str;
 	if (*str == 0)
 		return (ft_strdup(""));
 	end = str + ft_strlen(str) - 1;
-	while (end > str && isspace((unsigned char)*end))
+	while (end > str && ft_isspace((unsigned char)*end))
 		end--;
 	result = (char *)malloc(end - start + 2);
 	if (result)
 	{
-		strncpy(result, start, end - start + 1);
+		ft_strncpy(result, start, end - start + 1);
 		result[end - start + 1] = '\0';
 	}
 	return (result);
 }
 
-char	*extract_value(char *line)
+char	*cub_extract_value(char *line)
 {
 	char	*value_start;
 
 	value_start = ft_strchr(line, ' ');
 	if (!value_start)
 		return (ft_strdup(""));
-	return (trim_whitespace(value_start + 1));
+	return (cub_trim_whitespace(value_start + 1));
 }
 
-void	store_identifier_value(char *line, t_map *map)
+void	cub_store_identifier_value(char *line, t_map *map)
 {
-	if (strncmp(line, "NO", 2) == 0)
-		map->id_no = extract_value(line);
-	else if (strncmp(line, "SO", 2) == 0)
-		map->id_so = extract_value(line);
-	else if (strncmp(line, "WE", 2) == 0)
-		map->id_we = extract_value(line);
-	else if (strncmp(line, "EA", 2) == 0)
-		map->id_ea = extract_value(line);
-	else if (strncmp(line, "F", 1) == 0)
-		map->id_f = extract_value(line);
-	else if (strncmp(line, "C", 1) == 0)
-		map->id_c = extract_value(line);
+	if (ft_strncmp(line, "NO", 2) == 0)
+		map->id_no = cub_extract_value(line);
+	else if (ft_strncmp(line, "SO", 2) == 0)
+		map->id_so = cub_extract_value(line);
+	else if (ft_strncmp(line, "WE", 2) == 0)
+		map->id_we = cub_extract_value(line);
+	else if (ft_strncmp(line, "EA", 2) == 0)
+		map->id_ea = cub_extract_value(line);
+	else if (ft_strncmp(line, "F", 1) == 0)
+		map->id_f = cub_extract_value(line);
+	else if (ft_strncmp(line, "C", 1) == 0)
+		map->id_c = cub_extract_value(line);
 }
 
-void	process_map_line(char *line, t_map *map, int *i, int *max_width)
+void	cub_process_map_line(char *line, t_map *map, int *i, int *max_width)
 {
 	char	**temp;
 	int		line_length;
@@ -79,7 +79,7 @@ void	process_map_line(char *line, t_map *map, int *i, int *max_width)
 		*max_width = line_length;
 }
 
-void	process_lines(int fd, t_map *map)
+void	cub_process_lines(int fd, t_map *map)
 {
 	char	*line;
 	int		is_map_line;
@@ -96,12 +96,12 @@ void	process_lines(int fd, t_map *map)
 			is_map_line = 1;
 		if (!is_map_line)
 		{
-			store_identifier_value(line, map);
+			cub_store_identifier_value(line, map);
 			free(line);
 		}
 		else
-			process_map_line(line, map, &i, &max_width);
+			cub_process_map_line(line, map, &i, &max_width);
 		line = get_next_line(fd);
 	}
-	finalize_map(map, i, max_width);
+	cub_finalize_map(map, i, max_width);
 }

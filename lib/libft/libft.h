@@ -6,7 +6,7 @@
 /*   By: tvan-bee <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 17:16:15 by tvan-bee      #+#    #+#                 */
-/*   Updated: 2024/03/15 10:32:09 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/25 14:29:20 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 # include "../../inc/cub3d.h"
 
+void				ft_strncpy(char *dst, const char *src, size_t n);
+int					ft_isspace(char c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 int					ft_isalnum(int c);

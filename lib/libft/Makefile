@@ -11,6 +11,7 @@ BLUE = \033[1;34m
 RESET = \033[0m
 
 SRCS = \
+	ft_isspace.c \
 	ft_isalpha.c \
 	ft_isdigit.c \
 	ft_isalnum.c \
@@ -45,7 +46,8 @@ SRCS = \
 	ft_putstr_fd.c \
 	ft_putendl_fd.c \
 	ft_putnbr_fd.c \
-	ft_strcmp.c
+	ft_strcmp.c \
+	ft_strncpy.c
 
 
 SRCS_BONUS = \
@@ -80,7 +82,7 @@ clean:
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME) executable...$(RESET)"
-	@rm -f $(NAME)
+	@rm -f libft*.a
 
 re: fclean all
 

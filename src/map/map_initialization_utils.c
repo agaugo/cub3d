@@ -6,13 +6,13 @@
 /*   By: trstn4 <trstn4@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/04/03 14:51:31 by trstn4        #+#    #+#                 */
-/*   Updated: 2024/04/23 14:21:34 by trstn4        ########   odam.nl         */
+/*   Updated: 2024/04/25 12:25:17 by trstn4        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-t_map	*init_map_and_open_file(char *file, int *fd)
+t_map	*cub_init_map_and_open_file(char *file, int *fd)
 {
 	t_map	*map;
 
@@ -26,7 +26,7 @@ t_map	*init_map_and_open_file(char *file, int *fd)
 	return (map);
 }
 
-void	allocate_map_field(t_map *map)
+void	cub_allocate_map_field(t_map *map)
 {
 	map->field = ft_calloc(1, sizeof(char *));
 	if (!map->field)
@@ -36,7 +36,7 @@ void	allocate_map_field(t_map *map)
 	}
 }
 
-void	finalize_map(t_map *map, int height, int max_width)
+void	cub_finalize_map(t_map *map, int height, int max_width)
 {
 	map->north_texture = mlx_load_png(map->id_no);
 	map->south_texture = mlx_load_png(map->id_so);

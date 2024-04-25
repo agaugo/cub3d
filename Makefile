@@ -46,7 +46,7 @@ clean:
 fclean: clean
 	$(MAKE) fclean -C ./lib/libft
 	$(MAKE) fclean -C ./lib/get_next_line
-	@rm -rf $(NAME)
+	@rm -rf cub3D*
 
 re: fclean all
 
