@@ -1,7 +1,7 @@
-NO ./textures/texture1.png
-SO ./textures/texture4.png
-WE ./textures/texture3.png
-EA ./textures/texture2.png
+NO ./textures/codam3.png
+SO ./textures/codam3.png
+WE ./textures/codam3.png
+EA ./textures/codam3.png
 
 F 188, 184, 183
 C 37, 33, 36

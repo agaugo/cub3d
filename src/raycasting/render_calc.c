@@ -39,6 +39,7 @@ void	cub_calculate_wall_position_and_height(t_mlx *mlx, t_ray *ray)
 		ray->vert_hit_distance);
 	ray->perp_distance = cub_min(ray->horz_hit_distance, \
 		ray->vert_hit_distance) * cos(ray->ray_angle - mlx->player->angle);
+	
 	if (ray->perp_distance > 0)
 		ray->wall_slice_height = (TILE_SIZE / ray->perp_distance) \
 			* ray->distance_to_proj_plane;

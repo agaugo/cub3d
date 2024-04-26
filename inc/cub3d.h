@@ -32,9 +32,9 @@
 
 typedef struct s_ray
 {
-	float			ray_angle;
-	float			angle_increment;
-	float			distance_to_proj_plane;
+	double			ray_angle;
+	double			angle_increment;
+	double			distance_to_proj_plane;
 	int				ray_num;
 	int				is_ray_facing_down;
 	int				is_ray_facing_right;
@@ -56,7 +56,7 @@ typedef struct s_player
 	int		pixel_y;
 	char	direction;
 	double	angle;
-	float	fov_rd;
+	double	fov_rd;
 }	t_player;
 
 typedef struct s_key
@@ -136,7 +136,7 @@ int				cub_is_wall(t_mlx *mlx, int x, int y);
 double			cub_calc_distance_between_points(double x1, double y1, \
 					double x2, double y2);
 int				cub_max(int a, int b);
-int				cub_min(int a, int b);
+float				cub_min(float a, float b);
 mlx_texture_t	*cub_select_texture(t_mlx *mlx, t_ray *ray, \
 					double horz_hit_distance, double vert_hit_distance);
 double			cub_calculate_horizontal_collision(t_mlx *mlx, t_ray *ray);

@@ -30,7 +30,7 @@ void	cub_cast_rays(t_mlx *mlx)
 	t_ray	ray;
 
 	ray.ray_angle = mlx->player->angle - (FOV / 2.0 * (M_PI / 180.0));
-	ray.angle_increment = FOV / (float)SCREEN_WIDTH * (M_PI / 180.0);
+	ray.angle_increment = FOV / (double)SCREEN_WIDTH * (M_PI / 180.0);
 	ray.distance_to_proj_plane = (SCREEN_WIDTH / 2.0) / tan(FOV / 2.0 * \
 		(M_PI / 180.0));
 	ray.ray_num = 0;

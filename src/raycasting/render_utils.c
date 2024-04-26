@@ -20,7 +20,7 @@ int	cub_max(int a, int b)
 		return (b);
 }
 
-int	cub_min(int a, int b)
+float	cub_min(float a, float b)
 {
 	if (a < b)
 		return (a);
