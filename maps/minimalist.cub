@@ -1,7 +1,7 @@
-NO ./textures/ferre.png
-SO ./textures/ferre.png
-WE ./textures/ferre.png
-EA ./textures/ferre.png
+NO ./textures/liu1.png
+SO ./textures/liu2.png
+WE ./textures/liu3.png
+EA ./textures/liu4.png
 
 F 188, 184, 183
 C 37, 33, 36
