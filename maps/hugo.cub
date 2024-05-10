@@ -1,7 +1,7 @@
-NO ./textures/texture1.png
-SO ./textures/texture2.png
-WE ./textures/texture3.png
-EA ./textures/texture4.png
+NO ./textures/liu1.png
+SO ./textures/liu2.png
+WE ./textures/liu3.png
+EA ./textures/liu4.png
 
 F 188, 184, 183
 C 37, 33, 36
